@@ -1,0 +1,177 @@
+<Ui>
+    <Frame name="KeyConfig_EventFrame">
+        <Scripts>
+            <OnLoad>
+                self:register_event("SHOW_KEY_CONFIG");
+            </OnLoad>
+            <OnEvent>
+                KeyConfig:show();
+            </OnEvent>
+        </Scripts>
+    </Frame>
+
+    <Frame name="KeyConfig" hidden="true" frameStrata="FULLSCREEN" enableKeyboard="true">
+        <Size>
+            <RelDimension x="1.0" y="1.0"/>
+        </Size>
+        <Backdrop>
+            <BackgroundColor a="0.8" r="0" g="0" b="0"/>
+        </Backdrop>
+        <Frames>
+            <Frame name="$parentUnitMvt">
+                <Size>
+                    <AbsDimension x="150" y="140"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset><RelDimension x="0" y="0.1"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Frames>
+                    <Frame name="$parentForward" inherits="Template_KeyUp">
+                        <Anchors>
+                            <Anchor point="TOP"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad>
+                                self.Button:set_text("W");
+                                self.Name:set_text("Move\nforward");
+                                self.id = "MoveForward";
+                            </OnLoad>
+                        </Scripts>
+                    </Frame>
+                    <Frame name="$parentBackward" inherits="Template_KeyDown">
+                        <Anchors>
+                            <Anchor point="TOP" relativeTo="$parentForward" relativePoint="BOTTOM"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad>
+                                self.Name:set_text("Move\nbackward");
+                                self.Button:set_text("S");
+                                self.id = "MoveBackward";
+                            </OnLoad>
+                        </Scripts>
+                    </Frame>
+                    <Frame name="$parentStrafeLeft" inherits="Template_KeyLeft">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" relativeTo="$parentBackward" relativePoint="TOPLEFT">
+                                <Offset><AbsDimension x="-11" y="-1"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad>
+                                self.Button:set_text("A");
+                                self.Name:set_text("Strafe\nleft");
+                                self.id = "StrafeLeft";
+                            </OnLoad>
+                        </Scripts>
+                    </Frame>
+                    <Frame name="$parentStrafeRight" inherits="Template_KeyRight">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="$parentBackward" relativePoint="TOPRIGHT">
+                                <Offset><AbsDimension x="11" y="-1"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad>
+                                self.Button:set_text("D");
+                                self.Name:set_text("Strafe\nright");
+                                self.id = "StrafeRight";
+                            </OnLoad>
+                        </Scripts>
+                    </Frame>
+                    <Frame name="$parentJump" inherits="Template_KeyLargeUp">
+                        <Anchors>
+                            <Anchor point="TOP" relativeTo="$parentBackward" relativePoint="BOTTOM">
+                                <Offset><AbsDimension y="15"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad>
+                                self.Button:set_text("_");
+                                self.Name:set_text("Jump");
+                                self.id = "Jump";
+                            </OnLoad>
+                        </Scripts>
+                    </Frame>
+                </Frames>
+            </Frame>
+            <Frame name="$parentSelector" hidden="true" frameStrata="TOOLTIP">
+                <Backdrop>
+                    <BackgroundColor a="0.2" r="0" g="1" b="0"/>
+                </Backdrop>
+            </Frame>
+        </Frames>
+        <Layers>
+            <Layer>
+                <FontString name="$parentTitle" font="interface/fonts/pixel.ttf" fontHeight="24" justifyH="CENTER" justifyV="MIDDLE" outline="NORMAL" text="Key bindings">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <RelDimension y="0.1"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parentDescription" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="LEFT" justifyV="MIDDLE">
+                    <Size>
+                        <RelDimension x="0.7" y="0.2"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP" relativeTo="$parentTitle" relativePoint="BOTTOM">
+                            <Offset>
+                                <AbsDimension y="16"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Anchors>
+            <Anchor point="TOPLEFT"/>
+        </Anchors>
+        <Scripts>
+            <OnLoad>
+                self.bindedKey = nil;
+                
+                self.Description:set_text(
+                    "This screen will allow you to customize the basic controls of your character.\n"..
+                    "To modify a binding, click on the key below the action you want to edit then press the button you want to associate with this action.\n"..
+                    "When you're done, press the 'Escape' key, and play !\n"..
+                    "|cFF808080Note : key bindings are stored in Saves/KeyBindings.lua."
+                );
+                
+                self.bindings = {
+                    ["MoveForward"]  = KEY_W,
+                    ["MoveBackward"] = KEY_S,
+                    ["StrafeLeft"]   = KEY_A,
+                    ["StrafeRight"]  = KEY_D,
+                    ["Jump"]         = KEY_SPACE
+                };
+            </OnLoad>
+            <OnShow>
+                show_mouse_cursor(true);
+                self:enable_mouse(true, false);
+            </OnShow>
+            <OnHide>
+                show_mouse_cursor(false);
+            </OnHide>
+            <OnKeyUp>
+                if (arg1 == KEY_ESCAPE) then
+                    if (self.bindedKey) then
+                        self:set_binded_key(nil);
+                    else
+                        save_bindings(this.bindings);
+                        self:hide();
+                    end
+                else
+                    if (self.bindedKey) then
+                        self.bindings[this.bindedKey.id] = arg1;
+                        self.bindedKey.Button:set_text(get_key_string(arg1));
+                        self:set_binded_key(nil);
+                    end
+                end
+            </OnKeyUp>
+        </Scripts>
+    </Frame>
+</Ui>

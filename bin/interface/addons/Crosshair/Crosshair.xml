@@ -1,0 +1,26 @@
+<Ui>
+	<Frame name="Crosshair" hidden="false" movable="false" enableMouse="false" clampedToScreen="true">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Layers>
+		    <Layer>
+		        <Texture name="$parentTexture" file="|Crosshair.png">
+		            <Size>
+                        <RelDimension x="1.0" y="1.0"/>
+                    </Size>
+		            <Anchors>
+			            <Anchor point="CENTER">
+			                <Offset>
+			                    <AbsDimension x="1" y="1"/>
+			                </Offset>
+			            </Anchor>
+		            </Anchors>
+		        </Texture>
+		    </Layer>
+		</Layers>
+	</Frame>
+</Ui>

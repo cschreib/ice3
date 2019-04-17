@@ -1,0 +1,10 @@
+## Interface: 0001
+## Title: WorldMenu
+## Version: 1.0
+## Author: Kalith
+## SavedVariables: 
+
+Template_Menu.xml
+Template_Menu.lua
+Template_Dialog.xml
+WorldMenu.xml

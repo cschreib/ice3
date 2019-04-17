@@ -1,0 +1,83 @@
+<Ui>
+    <Button name="ButtonTemplate_MenuItem" virtual="true">
+        <Size>
+            <AbsDimension y="30"/>
+        </Size>
+        
+        <Backdrop>
+            <BackgroundColor a="0.5" r="0" g="0" b="0"/>
+            <EdgeColor r="1" g="1" b="1"/>
+            <EdgeSize><AbsValue x="2"/></EdgeSize>
+        </Backdrop>
+        
+        <NormalText font="Fonts/Pixel.ttf" fontHeight="16" setAllPoints="false" justifyV="BOTTOM">
+            <Anchors>
+                <Anchor point="CENTER">
+                    <Offset><AbsDimension x="0" y="-3"/></Offset>
+                </Anchor>
+            </Anchors>
+        </NormalText>
+        
+        <PushedTextOffset>
+            <AbsDimension x="2" y="2"/>
+        </PushedTextOffset>
+        
+        <HighlightTexture>
+            <Color a="0.5" r="1" g="1" b="1"/>
+        </HighlightTexture>
+    </Button>
+    
+    <Button name="ButtonTemplate_Menu" virtual="true">
+        <Size>
+            <AbsDimension x="100" y="30"/>
+        </Size>
+        
+        <Backdrop>
+            <BackgroundColor a="0.5" r="0" g="0" b="0"/>
+            <EdgeColor r="1" g="1" b="1"/>
+            <EdgeSize><AbsValue x="2"/></EdgeSize>
+        </Backdrop>
+        
+        <NormalText font="Fonts/Pixel.ttf" fontHeight="16" setAllPoints="false" justifyV="BOTTOM">
+            <Anchors>
+                <Anchor point="CENTER">
+                    <Offset><AbsDimension x="0" y="-3"/></Offset>
+                </Anchor>
+            </Anchors>
+        </NormalText>
+        
+        <PushedTextOffset>
+            <AbsDimension x="2" y="2"/>
+        </PushedTextOffset>
+        
+        <HighlightTexture>
+            <Color a="0.5" r="1" g="1" b="1"/>
+        </HighlightTexture>
+        
+        <Frames>
+            <Frame name="$parentSub" hidden="true">
+                <Size><AbsDimension x="110" y="30"/></Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+                        <Offset><AbsDimension x="0" y="3"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop>
+                    <BackgroundColor a="0.25" r="0" g="0" b="0"/>
+                    <EdgeColor a="0.5" r="1" g="1" b="1"/>
+                    <EdgeSize><AbsValue x="2"/></EdgeSize>
+                </Backdrop>
+            </Frame>
+        </Frames>
+        
+        <Scripts>
+            <OnClick>
+                if (this.Sub:IsShown()) then
+                    this.Sub:Hide();
+                else
+                    this.Sub:Show();
+                end
+            </OnClick>
+        </Scripts>
+    </Button>
+</Ui>

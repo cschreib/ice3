@@ -1,0 +1,281 @@
+
+<Ui>
+    <Frame name="Template_KeyUp" virtual="true">
+        <Size>
+            <AbsDimension x="50" y="70"/>
+        </Size>
+        <Frames>
+            <Button name="$parentButton" text="A">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentName" relativePoint="BOTTOM">
+                        <Offset><AbsDimension y="10"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <NormalTexture file="|KeyUp.png"/>
+                <PushedTexture file="|KeyDown.png"/>
+                <HighlightTexture file="|KeyHighlight.png" setAllPoints="false">
+                    <Size>
+                        <AbsDimension x="64" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </HighlightTexture>
+                <NormalText font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE" setAllPoints="false">
+                    <Color r="0" g="0" b="0"/>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset><AbsDimension x="-1" y="-3"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                </NormalText>
+                <PushedTextOffset>
+                    <AbsDimension x="2" y="2"/>
+                </PushedTextOffset>
+                <Scripts>
+                    <OnClick>
+                        KeyConfig:set_binded_key(this);
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Layers>
+            <Layer>
+                <FontString name="$parentName" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOP"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+    
+    <Frame name="Template_KeyDown" virtual="true">
+        <Size>
+            <AbsDimension x="50" y="70"/>
+        </Size>
+        <Frames>
+            <Button name="$parentButton" text="A">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOM" relativeTo="$parentName" relativePoint="TOP">
+                        <Offset><AbsDimension y="-3"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <NormalTexture file="|KeyUp.png"/>
+                <PushedTexture file="|KeyDown.png"/>
+                <HighlightTexture file="|KeyHighlight.png" setAllPoints="false">
+                    <Size>
+                        <AbsDimension x="64" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </HighlightTexture>
+                <NormalText font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE" setAllPoints="false">
+                    <Color r="0" g="0" b="0"/>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset><AbsDimension x="-1" y="-3"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                </NormalText>
+                <PushedTextOffset>
+                    <AbsDimension x="2" y="2"/>
+                </PushedTextOffset>
+                <Scripts>
+                    <OnClick>
+                        KeyConfig:set_binded_key(this);
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Layers>
+            <Layer>
+                <FontString name="$parentName" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="BOTTOM"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+    
+    <Frame name="Template_KeyLeft" virtual="true">
+        <Size>
+            <AbsDimension x="70" y="50"/>
+        </Size>
+        <Frames>
+            <Button name="$parentButton" text="A">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentName" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="5" y="-3"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <NormalTexture file="|KeyUp.png"/>
+                <PushedTexture file="|KeyDown.png"/>
+                <HighlightTexture file="|KeyHighlight.png" setAllPoints="false">
+                    <Size>
+                        <AbsDimension x="64" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </HighlightTexture>
+                <NormalText font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE" setAllPoints="false">
+                    <Color r="0" g="0" b="0"/>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset><AbsDimension x="-1" y="-3"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                </NormalText>
+                <PushedTextOffset>
+                    <AbsDimension x="2" y="2"/>
+                </PushedTextOffset>
+                <Scripts>
+                    <OnClick>
+                        KeyConfig:set_binded_key(this);
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Layers>
+            <Layer>
+                <FontString name="$parentName" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="LEFT"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+    
+    <Frame name="Template_KeyRight" virtual="true">
+        <Size>
+            <AbsDimension x="70" y="50"/>
+        </Size>
+        <Frames>
+            <Button name="$parentButton" text="A">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parentName" relativePoint="LEFT">
+                        <Offset><AbsDimension x="-5" y="-3"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <NormalTexture file="|KeyUp.png"/>
+                <PushedTexture file="|KeyDown.png"/>
+                <HighlightTexture file="|KeyHighlight.png" setAllPoints="false">
+                    <Size>
+                        <AbsDimension x="64" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </HighlightTexture>
+                <NormalText font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE" setAllPoints="false">
+                    <Color r="0" g="0" b="0"/>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset><AbsDimension x="-1" y="-3"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                </NormalText>
+                <PushedTextOffset>
+                    <AbsDimension x="2" y="2"/>
+                </PushedTextOffset>
+                <Scripts>
+                    <OnClick>
+                        KeyConfig:set_binded_key(this);
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Layers>
+            <Layer>
+                <FontString name="$parentName" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="RIGHT"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+    
+    <Frame name="Template_KeyLargeUp" virtual="true">
+        <Size>
+            <AbsDimension x="62" y="70"/>
+        </Size>
+        <Frames>
+            <Button name="$parentButton" text="A">
+                <Size>
+                    <AbsDimension x="44" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentName" relativePoint="BOTTOM">
+                        <Offset><AbsDimension y="10"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <NormalTexture file="|KeyLargeUp.png" setAllPoints="false">
+                    <Size>
+                        <AbsDimension x="64" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </NormalTexture>
+                <PushedTexture file="|KeyLargeDown.png" setAllPoints="false">
+                    <Size>
+                        <AbsDimension x="64" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </PushedTexture>
+                <HighlightTexture file="|KeyHighlight.png" setAllPoints="false">
+                    <Size>
+                        <AbsDimension x="64" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </HighlightTexture>
+                <NormalText font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE" setAllPoints="false">
+                    <Color r="0" g="0" b="0"/>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset><AbsDimension x="-1" y="-3"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                </NormalText>
+                <PushedTextOffset>
+                    <AbsDimension x="2" y="2"/>
+                </PushedTextOffset>
+                <Scripts>
+                    <OnClick>
+                        KeyConfig:set_binded_key(this);
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Layers>
+            <Layer>
+                <FontString name="$parentName" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOP"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+</Ui>

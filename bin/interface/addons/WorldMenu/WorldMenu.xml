@@ -1,0 +1,285 @@
+<Ui>
+    <Frame name="NewWorldDialog" inherits="FrameTemplate_Dialog" hidden="true">
+        <Size>
+            <AbsDimension x="400" y="150"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+        <Frames>
+            <Frame name="$parentContent">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentTitleRegion" relativePoint="BOTTOM"/>
+                    <Anchor point="LEFT"/>
+                    <Anchor point="RIGHT"/>
+                    <Anchor point="BOTTOM">
+                        <Offset><RelDimension x="0" y="-0.3"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Frames>
+                    <Frame name="$parentName">
+                        <Anchors>
+                            <Anchor point="TOP"/>
+                            <Anchor point="LEFT"/>
+                            <Anchor point="RIGHT"/>
+                            <Anchor point="BOTTOM">
+                                <Offset><RelDimension x="0" y="-0.5"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Layers>
+                            <Layer>
+                                <FontString name="$parentCaption" font="Fonts/Pixel.ttf" fontHeight="16" text="Name" justifyH="LEFT">
+                                    <Size><AbsDimension x="100" y="30"/></Size>
+                                    <Anchors>
+                                        <Anchor point="LEFT">
+                                            <Offset><AbsDimension x="15" y="0"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Frames>
+                            <EditBox name="$parentEdit" inherits="EditBoxTemplate_DialogEditBox">
+                                <Anchors>
+                                    <Anchor point="RIGHT">
+                                        <Offset><AbsDimension x="-7" y="0"/></Offset>
+                                    </Anchor>
+                                    <Anchor point="TOPLEFT" relativeTo="$parentCaption" relativePoint="TOPRIGHT"/>
+                                </Anchors>
+                            </EditBox>
+                        </Frames>
+                    </Frame>
+                    <Frame name="$parentSeed">
+                        <Anchors>
+                            <Anchor point="BOTTOM"/>
+                            <Anchor point="LEFT"/>
+                            <Anchor point="RIGHT"/>
+                            <Anchor point="TOP" relativeTo="$parentName" relativePoint="BOTTOM"/>
+                        </Anchors>
+                        <Layers>
+                            <Layer>
+                                <FontString name="$parentCaption" font="Fonts/Pixel.ttf" fontHeight="16" text="Seed" justifyH="LEFT">
+                                    <Size><AbsDimension x="100" y="30"/></Size>
+                                    <Anchors>
+                                        <Anchor point="LEFT">
+                                            <Offset><AbsDimension x="15" y="0"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Frames>
+                            <Button name="$parentRandom">
+                                <Size><AbsDimension x="36" y="36"/></Size>
+                                <Anchors>
+                                    <Anchor point="RIGHT">
+                                        <Offset><AbsDimension x="-7" y="0"/></Offset>
+                                    </Anchor>
+                                </Anchors>
+                                <HitRectInsets>
+                                    <AbsInset left="5" top="5" right="5" bottom="5"/>
+                                </HitRectInsets>
+                                <NormalTexture file="|Dice.png" setAllPoints="false">
+                                    <Size><AbsDimension x="32" y="32"/></Size>
+                                    <Anchors><Anchor point="CENTER"><Offset><AbsDimension x="2" y="3"/></Offset></Anchor></Anchors>
+                                </NormalTexture>
+                                <PushedTexture file="|DicePushed.png" setAllPoints="false">
+                                    <Size><AbsDimension x="32" y="32"/></Size>
+                                    <Anchors><Anchor point="CENTER"><Offset><AbsDimension x="2" y="3"/></Offset></Anchor></Anchors>
+                                </PushedTexture>
+                                <HighlightTexture file="|DiceHighlight.png" setAllPoints="false">
+                                    <Size><AbsDimension x="32" y="32"/></Size>
+                                    <Anchors><Anchor point="CENTER"><Offset><AbsDimension x="2" y="3"/></Offset></Anchor></Anchors>
+                                </HighlightTexture>
+                                <Scripts>
+                                    <OnClick>
+                                        local random = math.random(-1000000, 1000000);
+                                        this:GetParent().Edit:SetText(tostring(random));
+                                    </OnClick>
+                                </Scripts>
+                            </Button>
+                            <EditBox name="$parentEdit" inherits="EditBoxTemplate_DialogEditBox">
+                                <Anchors>
+                                    <Anchor point="RIGHT" relativeTo="$parentRandom" relativePoint="LEFT">
+                                        <Offset><AbsDimension x="0" y="0"/></Offset>
+                                    </Anchor>
+                                    <Anchor point="TOPLEFT" relativeTo="$parentCaption" relativePoint="TOPRIGHT"/>
+                                </Anchors>
+                            </EditBox>
+                        </Frames>
+                    </Frame>
+                </Frames>
+            </Frame>
+            <Frame name="$parentButtonZone">
+                <Anchors>
+                    <Anchor point="BOTTOM"/>
+                    <Anchor point="LEFT"/>
+                    <Anchor point="RIGHT"/>
+                    <Anchor point="TOP" relativeTo="$parentContent" relativePoint="BOTTOM"/>
+                </Anchors>
+                <Frames>
+                    <Button name="$parentOK" inherits="ButtonTemplate_DialogButton" text="OK">
+                        <Anchors>
+                            <Anchor point="BOTTOMRIGHT">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                NewWorld(NewWorldDialog.Content.Name.Edit:GetText(), tonumber(NewWorldDialog.Content.Seed.Edit:GetText()));
+                                NewWorldDialog:Hide();
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                    <Button name="$parentCancel" inherits="ButtonTemplate_DialogButton" text="Cancel">
+                        <Anchors>
+                            <Anchor point="RIGHT" relativeTo="$parentOK" relativePoint="LEFT">
+                                <Offset><AbsDimension x="3" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                NewWorldDialog:Hide();
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                this.Title.TitleString:SetText("New world ?");
+            </OnLoad>
+            <OnShow>
+                this:GetBase():OnShow();
+                local worldname = GetAvailableWorldName();
+                this.Content.Name.Edit:SetText(worldname);
+                this.Content.Seed.Random:Click();
+            </OnShow>
+        </Scripts>
+    </Frame>
+    
+    <Frame name="OpenWorldDialog" inherits="FrameTemplate_Dialog" hidden="true">
+        <Size>
+            <AbsDimension x="400" y="115"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+        <Frames>
+            <Frame name="$parentContent">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentTitleRegion" relativePoint="BOTTOM"/>
+                    <Anchor point="LEFT"/>
+                    <Anchor point="RIGHT"/>
+                    <Anchor point="BOTTOM">
+                        <Offset><RelDimension x="0" y="-0.3"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Frames>
+                    <Frame name="$parentName" setAllPoints="true">
+                        <Layers>
+                            <Layer>
+                                <FontString name="$parentCaption" font="Fonts/Pixel.ttf" fontHeight="16" text="Name" justifyH="LEFT">
+                                    <Size><AbsDimension x="100" y="30"/></Size>
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT">
+                                            <Offset><AbsDimension x="15" y="4"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                        <Frames>
+                            <EditBox name="$parentEdit" inherits="EditBoxTemplate_DialogEditBox">
+                                <Anchors>
+                                    <Anchor point="RIGHT">
+                                        <Offset><AbsDimension x="-7" y="0"/></Offset>
+                                    </Anchor>
+                                    <Anchor point="TOPLEFT" relativeTo="$parentCaption" relativePoint="TOPRIGHT"/>
+                                </Anchors>
+                            </EditBox>
+                        </Frames>
+                    </Frame>
+                </Frames>
+            </Frame>
+            <Frame name="$parentButtonZone">
+                <Anchors>
+                    <Anchor point="BOTTOM"/>
+                    <Anchor point="LEFT"/>
+                    <Anchor point="RIGHT"/>
+                    <Anchor point="TOP" relativeTo="$parentContent" relativePoint="BOTTOM"/>
+                </Anchors>
+                <Frames>
+                    <Button name="$parentOK" inherits="ButtonTemplate_DialogButton" text="OK">
+                        <Anchors>
+                            <Anchor point="BOTTOMRIGHT">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                OpenWorld(OpenWorldDialog.Content.Name.Edit:GetText());
+                                OpenWorldDialog:Hide();
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                    <Button name="$parentCancel" inherits="ButtonTemplate_DialogButton" text="Cancel">
+                        <Anchors>
+                            <Anchor point="RIGHT" relativeTo="$parentOK" relativePoint="LEFT">
+                                <Offset><AbsDimension x="3" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                OpenWorldDialog:Hide();
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                this.Title.TitleString:SetText("Open world ?");
+            </OnLoad>
+            <OnShow>
+                this:GetBase():OnShow();
+                this.Content.Name.Edit:SetText("");
+            </OnShow>
+        </Scripts>
+    </Frame>
+    
+    <Frame name="WorldMenu">
+        <Size>
+            <AbsDimension x="200" y="200"/>
+        </Size>
+        
+        <Anchors>
+            <Anchor point="TOPLEFT">
+                <Offset><AbsDimension x="3" y="3"/></Offset>
+            </Anchor>
+        </Anchors>
+        
+        <Frames>
+            <Button name="$parentMenu" inherits="ButtonTemplate_Menu" text="World">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                </Anchors>
+            </Button>
+        </Frames>
+        
+        <Scripts>
+            <OnLoad>
+                this.Menu:AddItem("New", "New...", function ()
+                    NewWorldDialog:Show();
+                    WorldMenu.Menu.Sub:Hide();
+                end);
+                this.Menu:AddItem("Open", "Open...", function ()
+                    OpenWorldDialog:Show();
+                    WorldMenu.Menu.Sub:Hide();
+                end);
+            </OnLoad>
+        </Scripts>
+    </Frame>
+</Ui>

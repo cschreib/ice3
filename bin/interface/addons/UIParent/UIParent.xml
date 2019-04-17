@@ -1,0 +1,10 @@
+<Ui>
+	<Frame name="UIParent" hidden="false" movable="false" enableMouse="false" clampedToScreen="true">
+		<Size>
+			<RelDimension x="1.0" y="1.0"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+	</Frame>
+</Ui>

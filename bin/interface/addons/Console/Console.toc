@@ -1,0 +1,7 @@
+## Interface: 0001
+## Title: Console
+## Version: 1.0
+## Author: Kalith
+## SavedVariables: 
+
+Console.xml

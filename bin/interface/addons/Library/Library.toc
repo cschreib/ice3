@@ -1,0 +1,9 @@
+## Interface: 0001
+## Title: Library
+## Version: 1.0
+## Author: Kalith
+## SavedVariables: 
+
+class_helper.lua
+Library_AddOn.lua
+Library_Color.lua

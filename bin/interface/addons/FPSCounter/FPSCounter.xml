@@ -1,0 +1,48 @@
+<Ui>
+    <Script file="FPSCounter.lua"/>
+
+    <Frame name="FPSCounter_Frame" clampedToScreen="false">
+        <Size>
+            <RelDimension x="1.0" y="1.0"/>
+        </Size>
+        <Anchors>
+            <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"/>
+        </Anchors>
+        <Layers>
+            <Layer>
+                <FontString name="FPSCounter_Text" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="RIGHT" justifyV="BOTTOM" outline="NORMAL">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-5" y="-5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="Info_Text" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="CENTER" justifyV="TOP" outline="NORMAL">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension y="5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="States_Text" font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="RIGHT" justifyV="TOP" outline="NORMAL">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT">
+                            <Offset>
+                                <AbsDimension x="-5" y="5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnUpdate>
+                FPSCounter.on_update();
+            </OnUpdate>
+        </Scripts>
+    </Frame>
+</Ui>

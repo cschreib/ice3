@@ -1,0 +1,10 @@
+#Core
+UIParent:1
+Library:1
+#Others
+Console:1
+Crosshair:1
+FPSCounter:1
+ItemSelector:1
+WorldMenu:0
+KeyConfig:1

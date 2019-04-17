@@ -1,0 +1,66 @@
+<Ui>
+	<Frame name="Console" frameStrata="HIGH" hidden="true" movable="false" clampedToScreen="true">
+		<Size>
+			<RelDimension x="0.8"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+        <Backdrop>
+            <BackgroundColor a="0.5" r="0" g="0" b="0"/>
+            <EdgeColor r="1" g="1" b="1"/>
+            <EdgeSize><AbsValue x="3"/></EdgeSize>
+        </Backdrop>
+        <Frames>
+            <EditBox name="$parentEdit">
+                <FontString font="interface/fonts/pixel.ttf" fontHeight="12" justifyH="LEFT"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT">    <Offset><AbsDimension x="+7" y="2"/></Offset></Anchor>
+                    <Anchor point="BOTTOMRIGHT"><Offset><AbsDimension x="-7" y="0"/></Offset></Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnEscapePressed>
+                        self:set_text("");
+                        Console:hide();
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        local text = self:get_text();
+                        self:set_text("");
+                        
+                        local func = loadstring(text);
+                        if (func) then
+                            func();
+                        end
+                        
+                        Console:hide();
+                    </OnEnterPressed>
+                </Scripts>
+            </EditBox>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                self:set_height(36);
+            </OnLoad>
+            <OnShow>
+                self.Edit:set_focus();
+            </OnShow>
+            <OnHide>
+                self.Edit:clear_focus();
+            </OnHide>
+        </Scripts>
+	</Frame>
+    
+    <Frame name="Console_Frame" hidden="false" enableKeyboard="true" setAllPoints="true">
+        <Scripts>
+            <OnKeyUp>
+                if (arg1 == KEY_APOSTROPHE) then
+                    if (Console:is_shown()) then
+                        Console:hide();
+                    else
+                        Console:show();
+                    end
+                end
+            </OnKeyUp>
+        </Scripts>
+    </Frame>
+</Ui>

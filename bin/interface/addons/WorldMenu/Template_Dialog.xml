@@ -1,0 +1,162 @@
+<Ui>
+    <Frame name="FrameTemplate_Dialog" virtual="true" hidden="false" movable="true" enableMouse="true" clampedToScreen="true" frameStrata="DIALOG" topLevel="true">
+        <Backdrop>
+            <BackgroundColor a="0.5" r="0" g="0" b="0"/>
+            <EdgeColor r="1" g="1" b="1"/>
+            <EdgeSize><AbsValue x="3"/></EdgeSize>
+        </Backdrop>
+        <TitleRegion>
+            <Size>
+                <AbsDimension y="30"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP" relativePoint="TOP">
+                    <Offset>
+                        <AbsDimension x="0" y="0"/>
+                    </Offset>
+                </Anchor>
+                <Anchor point="LEFT" relativePoint="LEFT">
+                    <Offset>
+                        <AbsDimension x="0"/>
+                    </Offset>
+                </Anchor>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                    <Offset>
+                        <AbsDimension x="-30"/>
+                    </Offset>
+                </Anchor>
+            </Anchors>
+        </TitleRegion>
+        <Scripts>
+            <OnShow>
+                this:Raise();
+            </OnShow>
+        </Scripts>
+        <Frames>
+            <Frame name="$parentTitle">
+                <Size>
+                    <AbsDimension y="30"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="TOP">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                    <Anchor point="LEFT" relativePoint="LEFT">
+                        <Offset>
+                            <AbsDimension x="0"/>
+                        </Offset>
+                    </Anchor>
+                    <Anchor point="RIGHT" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-27"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop>
+                    <BackgroundColor a="0.5" r="0" g="0" b="0"/>
+                    <EdgeColor a="0.5" r="1" g="1" b="1"/>
+                    <EdgeSize><AbsValue x="3"/></EdgeSize>
+                    <BackgroundInsets><AbsInset left="3" right="3" top="3" bottom="3"/></BackgroundInsets>
+                </Backdrop>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parentTitleString" font="Fonts/Pixel.ttf" fontHeight="16" justifyH="CENTER" text="">
+                            <Anchors>
+                                <Anchor point="CENTER">
+                                    <Offset><AbsDimension y="-3"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button name="$parentCloseButton" text="X">
+                        <Size>
+                            <AbsDimension x="30" y="30"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="-3"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Backdrop>
+                            <EdgeColor r="1" g="1" b="1"/>
+                            <EdgeSize><AbsValue x="3"/></EdgeSize>
+                        </Backdrop>
+                        <NormalText font="Fonts/Pixel.ttf" fontHeight="16" setAllPoints="false">
+                            <Anchors>
+                                <Anchor point="CENTER">
+                                    <Offset><AbsDimension x="1" y="-3"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </NormalText>
+                        <PushedTextOffset>
+                            <AbsDimension x="2" y="2"/>
+                        </PushedTextOffset>
+                        <HighlightTexture>
+                            <Color a="0.5" r="1" g="1" b="1"/>
+                        </HighlightTexture>
+                        <Scripts>
+                            <OnClick>
+                                this:GetParent():GetParent():Hide();
+                                if (this:GetParent():GetParent().OnClose) then
+                                    this:GetParent():GetParent():OnClose();
+                                end
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+        </Frames>
+    </Frame>
+    
+    <Button name="ButtonTemplate_DialogButton" virtual="true">
+        <Size>
+            <AbsDimension x="100" y="30"/>
+        </Size>
+        
+        <Backdrop>
+            <BackgroundColor a="0.5" r="0" g="0" b="0"/>
+            <EdgeColor r="1" g="1" b="1"/>
+            <EdgeSize><AbsValue x="3"/></EdgeSize>
+        </Backdrop>
+        
+        <NormalText font="Fonts/Pixel.ttf" fontHeight="16" setAllPoints="false" justifyV="BOTTOM">
+            <Anchors>
+                <Anchor point="CENTER">
+                    <Offset><AbsDimension x="0" y="-3"/></Offset>
+                </Anchor>
+            </Anchors>
+        </NormalText>
+        
+        <PushedTextOffset>
+            <AbsDimension x="2" y="2"/>
+        </PushedTextOffset>
+        
+        <HighlightTexture>
+            <Color a="0.5" r="1" g="1" b="1"/>
+        </HighlightTexture>
+    </Button>
+    
+    <EditBox name="EditBoxTemplate_DialogEditBox" virtual="true">
+        <Size>
+            <AbsDimension x="100" y="36"/>
+        </Size>
+        
+        <FontString font="Fonts/Pixel.ttf" fontHeight="16"/>
+        
+        <Backdrop>
+            <BackgroundColor a="0.5" r="0" g="0" b="0"/>
+            <EdgeColor r="1" g="1" b="1"/>
+            <EdgeSize><AbsValue x="3"/></EdgeSize>
+        </Backdrop>
+        
+        <Scripts>
+            <OnEscapePressed>
+                this:ClearFocus();
+            </OnEscapePressed>
+        </Scripts>
+    </EditBox>
+</Ui>
