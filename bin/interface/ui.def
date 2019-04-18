@@ -25,21 +25,21 @@
     <n[.,1]:Color n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0"/>
 
     <n[.,1]:Shadow>
-        <n[.,1]:Color n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0"/>
+        <n[.,1]:Color n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0" c=""/>
         <n[.,1]:Offset n:x="0" n:y="0"/>
     </Shadow>
 
 </FontString>
 
-<d[Region]:Texture file="" alphaMode="BLEND">
+<d[Region]:Texture file="" filter="NONE" alphaMode="BLEND">
 
     <n[.,1]:TexCoords n:left="0.0" n:right="1.0" n:top="0.0" n:bottom="1.0"/>
 
-    <n[.,1]:Color n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0"/>
+    <n[.,1]:Color n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0" c=""/>
 
     <n[.,1]:Gradient orientation="HORIZONTAL">
-        <n[1,1]:MinColor n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0"/>
-        <n[1,1]:MaxColor n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0"/>
+        <n[1,1]:MinColor n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0" c=""/>
+        <n[1,1]:MaxColor n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0" c=""/>
     </Gradient>
 
 </Texture>
@@ -64,15 +64,8 @@
             <n[*]:AbsInset n:left="0"   n:right="0"   n:top="0"   n:bottom="0"/>
             <n[*]:RelInset n:left="0.0" n:right="0.0" n:top="0.0" n:bottom="0.0"/>
         </BackgroundInsets>
-        
-        <n[.,1]:EdgeInsets>
-            <n[*]:AbsInset n:left="0"   n:right="0"   n:top="0"   n:bottom="0"/>
-            <n[*]:RelInset n:left="0.0" n:right="0.0" n:top="0.0" n:bottom="0.0"/>
-        </EdgeInsets>
 
-        <n[.,1]:BackgroundColor n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0"/>
-
-        <n[.,1]:EdgeColor n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0"/>
+        <n[.,1]:BackgroundColor n:a="1.0" n:r="0.0" n:g="0.0" n:b="0.0" c=""/>
 
         <n[.,1]:TileSize>
             <n[*]:AbsValue n:x/>
@@ -205,7 +198,7 @@
 
     <n[.,1]:c[FontString]:FontString name="$parentFontString"/>
 
-    <n[.,1]:HighlightColor n:a="0.5" n:r="1" n:g="1" n:b="1"/>
+    <n[.,1]:HighlightColor n:a="0.5" n:r="1" n:g="1" n:b="1" c=""/>
 
     <n[.,1]:TextInsets n:left="0" n:right="0" n:top="0" n:bottom="0"/>
 
@@ -338,10 +331,10 @@
 
 </Slider>
 
-<d[Frame]:StatusBar n:minValue="0" n:maxValue="1" n:defaultValue="1" orientation="HORIZONTAL" drawLayer="ARTWORK">
+<d[Frame]:StatusBar n:minValue="0" n:maxValue="1" n:defaultValue="1" orientation="HORIZONTAL" drawLayer="ARTWORK" b:reversed="false">
 
     <n[*]:c[Texture]:BarTexture name="$parentBarTexture"/>
-    <n[*]:BarColor n:a="1" n:r="0.0" n:g="0.0" n:b="0.0"/>
+    <n[*]:BarColor n:a="1" n:r="0.0" n:g="0.0" n:b="0.0" c=""/>
     <n[*]:./>
 
     <n[.,1]:Scripts>
