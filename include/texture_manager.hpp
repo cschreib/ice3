@@ -3,8 +3,8 @@
 
 #include <string>
 #include <map>
-#include <utils_refptr.hpp>
-#include <utils_wptr.hpp>
+#include <lxgui/utils_refptr.hpp>
+#include <lxgui/utils_wptr.hpp>
 #include "texture.hpp"
 
 class texture_manager

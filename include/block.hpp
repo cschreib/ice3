@@ -1,14 +1,14 @@
 #ifndef BLOCK_HPP
 #define BLOCK_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include <vector>
 #include <array>
 #include "color.hpp"
 #include "vector3.hpp"
 #include "vertex.hpp"
 #include "texture.hpp"
-#include <utils_refptr.hpp>
+#include <lxgui/utils_refptr.hpp>
 
 class texture_manager;
 

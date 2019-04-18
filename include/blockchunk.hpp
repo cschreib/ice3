@@ -1,7 +1,7 @@
 #ifndef BLOCKCHUNK_H
 #define BLOCKCHUNK_H
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include <map>
 #include "color.hpp"
 #include "axisalignedbox.hpp"

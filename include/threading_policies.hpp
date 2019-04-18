@@ -1,7 +1,7 @@
 #ifndef THREADING_POLICIES_HPP
 #define THREADING_POLICIES_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include <memory>
 
 namespace policies {

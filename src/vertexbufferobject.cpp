@@ -1,8 +1,8 @@
 #include "vertexbufferobject.hpp"
 #include "glew.hpp"
 
-#include <utils_exception.hpp>
-#include <utils_string.hpp>
+#include <lxgui/utils_exception.hpp>
+#include <lxgui/utils_string.hpp>
 #include <cstring>
 
 const vertex_type vbo_vertex_1::TYPE = T2_C3_V3;

@@ -1,5 +1,6 @@
 #include "movable.hpp"
-#include <utils_string.hpp>
+#include <lxgui/utils_string.hpp>
+#include <lxgui/utils_exception.hpp>
 
 movable::movable(utils::wptr<world> pWorld) :
     pWorld_(pWorld), mPosition_(vector3f::ZERO), mScale_(vector3f::UNIT), mOrientation_(quaternion::UNIT),

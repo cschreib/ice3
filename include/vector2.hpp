@@ -1,7 +1,7 @@
 #ifndef VECTOR2_HPP
 #define VECTOR2_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 
 class vector2f
 {

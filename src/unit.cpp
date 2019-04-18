@@ -1,9 +1,9 @@
 #include "unit.hpp"
 #include "world.hpp"
 
-#include <gui_event.hpp>
-#include <gui_eventmanager.hpp>
-#include <utils_string.hpp>
+#include <lxgui/gui_event.hpp>
+#include <lxgui/gui_eventmanager.hpp>
+#include <lxgui/utils_string.hpp>
 
 unit::unit(const utils::ustring& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
     movable(pWorld, vector3f(pChunk.lock()->get_block_position(pBlock))),

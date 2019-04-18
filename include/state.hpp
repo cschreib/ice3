@@ -1,9 +1,10 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
-#include <utils.hpp>
-#include <utils_wptr.hpp>
-#include <input.hpp>
+#include <lxgui/utils.hpp>
+#include <lxgui/utils_wptr.hpp>
+#include <lxgui/input.hpp>
+#include <iostream>
 
 struct input_data
 {

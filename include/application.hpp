@@ -1,11 +1,11 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
-#include <utils.hpp>
-#include <utils_refptr.hpp>
-#include <utils_wptr.hpp>
-#include <luapp_var.hpp>
-#include <luapp_state.hpp>
+#include <lxgui/utils.hpp>
+#include <lxgui/utils_refptr.hpp>
+#include <lxgui/utils_wptr.hpp>
+#include <lxgui/luapp_var.hpp>
+#include <lxgui/luapp_state.hpp>
 #include <map>
 #include <string>
 #include <deque>

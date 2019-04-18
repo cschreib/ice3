@@ -1,7 +1,7 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include "vector3.hpp"
 #include "quaternion.hpp"
 #include <initializer_list>

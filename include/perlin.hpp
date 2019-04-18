@@ -1,7 +1,7 @@
 #ifndef PERLIN_HPP
 #define PERLIN_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 
 struct perlin_noise
 {

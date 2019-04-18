@@ -10,8 +10,8 @@
 #include "unit.hpp"
 #include "perlin.hpp"
 
-#include <gui_manager.hpp>
-#include <utils_string.hpp>
+#include <lxgui/gui_manager.hpp>
+#include <lxgui/utils_string.hpp>
 #include <set>
 
 class camera;

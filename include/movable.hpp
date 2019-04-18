@@ -1,10 +1,10 @@
 #ifndef MOVABLE_HPP
 #define MOVABLE_HPP
 
-#include <utils.hpp>
-#include <utils_wptr.hpp>
-#include <utils_refptr.hpp>
-#include <gui_eventreceiver.hpp>
+#include <lxgui/utils.hpp>
+#include <lxgui/utils_wptr.hpp>
+#include <lxgui/utils_refptr.hpp>
+#include <lxgui/gui_eventreceiver.hpp>
 #include "vector3.hpp"
 #include "quaternion.hpp"
 #include "matrix.hpp"

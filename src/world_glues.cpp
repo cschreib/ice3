@@ -1,5 +1,5 @@
 #include "world.hpp"
-#include <luapp.hpp>
+#include <lxgui/luapp.hpp>
 
 int l_load_chunk(lua_State* pLua)
 {

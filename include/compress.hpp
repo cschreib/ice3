@@ -1,7 +1,7 @@
 #ifndef COMPRESS_HPP
 #define COMPRESS_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 
 namespace compress
 {

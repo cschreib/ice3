@@ -1,7 +1,7 @@
 #ifndef QUATERNION_HPP
 #define QUATERNION_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include "vector3.hpp"
 
 class quaternion

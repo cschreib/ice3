@@ -1,8 +1,8 @@
 #ifndef SHADER_HPP
 #define SHADER_HPP
 
-#include <utils.hpp>
-#include <utils_wptr.hpp>
+#include <lxgui/utils.hpp>
+#include <lxgui/utils_wptr.hpp>
 #include <string>
 
 class texture;

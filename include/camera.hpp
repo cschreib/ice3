@@ -1,7 +1,7 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include "axisalignedbox.hpp"
 #include "movable.hpp"
 #include "node.hpp"

@@ -1,5 +1,5 @@
 #include "texture_manager.hpp"
-#include <utils_exception.hpp>
+#include <lxgui/utils_exception.hpp>
 
 #include <png.h>
 #include <fstream>

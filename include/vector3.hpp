@@ -1,7 +1,7 @@
 #ifndef VECTOR3_HPP
 #define VECTOR3_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include <iosfwd>
 #include <cmath>
 #include <limits>

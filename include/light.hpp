@@ -1,7 +1,7 @@
 #ifndef LIGHT_HPP
 #define LIGHT_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include "movable.hpp"
 #include <memory>
 #include <array>

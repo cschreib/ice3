@@ -1,7 +1,7 @@
 #include "world.hpp"
 #include "worldfile.hpp"
 #include "worker_thread.hpp"
-#include <utils_filesystem.hpp>
+#include <lxgui/utils_filesystem.hpp>
 #include <fstream>
 
 const int world::REGION_SIZE = 9;

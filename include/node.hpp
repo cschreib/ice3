@@ -1,7 +1,7 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include "movable.hpp"
 
 class node : public movable

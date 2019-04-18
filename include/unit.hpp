@@ -1,9 +1,9 @@
 #ifndef UNIT_HPP
 #define UNIT_HPP
 
-#include <utils.hpp>
-#include <utils_string.hpp>
-#include <gui_eventreceiver.hpp>
+#include <lxgui/utils.hpp>
+#include <lxgui/utils_string.hpp>
+#include <lxgui/gui_eventreceiver.hpp>
 #include "node.hpp"
 #include "cylinder.hpp"
 #include <memory>

@@ -1,7 +1,7 @@
 #ifndef VERTEXBUFFEROBJECT_HPP
 #define VERTEXBUFFEROBJECT_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include "vector3.hpp"
 #include <vector>
 

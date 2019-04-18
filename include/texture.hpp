@@ -2,7 +2,7 @@
 #define TEXTURE_HPP
 
 #include <vector>
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include "color.hpp"
 
 class texture

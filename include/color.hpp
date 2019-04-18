@@ -1,7 +1,7 @@
 #ifndef COLOR_HPP
 #define COLOR_HPP
 
-#include <utils.hpp>
+#include <lxgui/utils.hpp>
 #include <iosfwd>
 
 class color

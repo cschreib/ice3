@@ -2,8 +2,8 @@
 #include "texture.hpp"
 #include "glew.hpp"
 
-#include <utils_filesystem.hpp>
-#include <utils_exception.hpp>
+#include <lxgui/utils_filesystem.hpp>
+#include <lxgui/utils_exception.hpp>
 #include <fstream>
 #include <sstream>
 #include <iostream>

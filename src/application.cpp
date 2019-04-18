@@ -1,6 +1,6 @@
 #include "application.hpp"
-#include <utils_filesystem.hpp>
-#include <utils_string.hpp>
+#include <lxgui/utils_filesystem.hpp>
+#include <lxgui/utils_string.hpp>
 #include <iostream>
 #include <sstream>
 
