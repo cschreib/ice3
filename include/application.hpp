@@ -83,8 +83,8 @@ private :
     lua::state  mLua_;
     std::string sLocale_;
 
-    uint uiScreenWidth_;
-    uint uiScreenHeight_;
+    uint uiScreenWidth_ = 0;
+    uint uiScreenHeight_ = 0;
 
     mutable utils::refptr<input_data> pInputData_;
 
@@ -92,7 +92,7 @@ private :
 
     sf::Window mWindow_;
 
-    bool bMouseGrabbed_;
+    bool bMouseGrabbed_ = false;
 };
 
 #endif

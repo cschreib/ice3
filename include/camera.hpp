@@ -55,16 +55,16 @@ private :
 
     void make_culling_planes_() const;
 
-    float fFOVy_;
-    float fNear_;
-    float fFar_;
-    float fAspectRatio_;
+    float fFOVy_ = 1.25f;
+    float fNear_ = 0.1f;
+    float fFar_ = 100.0f;
+    float fAspectRatio_ = 1.0f;
 
     mutable matrix mViewMatrix_;
     mutable matrix mProjMatrix_;
 
-    mutable bool bUpdateProjMatrix_;
-    mutable bool bUpdateViewMatrix_;
+    mutable bool bUpdateProjMatrix_ = true;
+    mutable bool bUpdateViewMatrix_ = true;
 
     struct plane
     {
@@ -83,7 +83,7 @@ private :
     };
 
     mutable std::array<plane,6> lCullingPlanes_;
-    mutable bool                bUpdateCullingPlanes_;
+    mutable bool                bUpdateCullingPlanes_ = true;
 
     std::function<void (movable::movement_type mType)> mOnMoved_;
 };

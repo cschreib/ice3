@@ -14,24 +14,24 @@ enum vertex_type
 
 struct vbo_vertex_1
 {
-    float  u, v;
-    float  r, g, b;
+    float  u = 0.0, v = 0.0;
+    float  r = 0.0, g = 0.0, b = 0.0;
     vector3f pos;
 
     static const vertex_type TYPE;
 };
 struct vbo_vertex_2
 {
-    float  u, v, s, l, o;
-    float  r, g, b;
+    float  u = 0.0, v = 0.0, s = 0.0, l = 0.0, o = 0.0;
+    float  r = 0.0, g = 0.0, b = 0.0;
     vector3f pos;
 
     static const vertex_type TYPE;
 };
 struct vbo_vertex_3
 {
-    float  u, v, s, l;
-    float  r, g, b;
+    float  u = 0.0, v = 0.0, s = 0.0, l = 0.0;
+    float  r = 0.0, g = 0.0, b = 0.0;
     vector3f pos;
 
     static const vertex_type TYPE;
@@ -42,9 +42,9 @@ struct vbo_data
     vbo_data(uint size, vertex_type type);
     ~vbo_data();
 
-    vertex_type mType;
-    void*       pData;
-    uint        uiNum;
+    vertex_type mType = T2_C3_V3;
+    void*       pData = nullptr;
+    uint        uiNum = 0;
 };
 
 class vertex_buffer_object
@@ -81,9 +81,9 @@ private :
     void init_();
     void set_data_(const void* pData, uint uiNumVertex, vertex_type mType);
 
-    vertex_type mVertexType_;
-    uint        uiVBOHandle_;
-    uint        uiNumVertex_;
+    vertex_type mVertexType_ = T2_C3_V3;
+    uint        uiVBOHandle_ = 0;
+    uint        uiNumVertex_ = 0;
 };
 
 #endif

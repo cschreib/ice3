@@ -22,22 +22,10 @@
 void register_glues(lua::state& mState);
 
 world::world(application& mApp, bool bPlay, bool bShow) :
-    state(mApp, bPlay, bShow), mApp_(mApp), bEmpty_(true), iWorldSeed_(0),
-    bUpdateVisibleChunkList_(true), pSelectedBlock_(nullptr),
+    state(mApp, bPlay, bShow), mApp_(mApp),
     pUpdaterThread_(new updater_thread_t()),
     pLoadWorker_(new load_worker_t()), pSaveWorker_(new save_worker_t),
-    pLoaderThread_(new loader_thread_t(*pLoadWorker_, *pSaveWorker_)),
-    uiNumReceivedChunkPerFrame_(5u), fRenderDistance_(150.0f),
-    bVBOEnabled_(false), bVBOSupported_(false), bUseVBO_(false),
-    bShadersEnabled_(false), bShadersSupported_(false), bUseShaders_(false),
-    bWireframe_(false), bFog_(false), bSmoothLighting_(true),
-    bBuildLightingArray_(true), uiLightingArraySize_(128u),
-    uiLightingArrayRatio_(256u/uiLightingArraySize_), uiLightingUpdateRate_(32u),
-    bSunLight_(true), bLights_(true), mSunDayColor_(0.90f, 0.96f, 1.0f),
-    mSunDawnColor_(1.0f, 0.93f, 0.54f), mSunNightColor_(0.1f, 0.1f, 0.1f),
-    mSkyDayColor_(0.47f, 0.81f, 0.89f), mSkyDawnColor_(1.0f, 0.682f, 0.024f),
-    mSkyNightColor_(0.0f, 0.0f, 0.0f), mTorchLight_(1.0f, 0.93f, 0.54f),
-    fDayTime_(0.0f), fDayDuration_(60.0f), bDayNightCycle_(true)
+    pLoaderThread_(new loader_thread_t(*pLoadWorker_, *pSaveWorker_))
 {
     bVBOSupported_ = vertex_buffer_object::is_supported();
     std::cout << "Note : vertex buffer objects are " <<

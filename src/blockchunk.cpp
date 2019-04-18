@@ -29,10 +29,7 @@ const std::array<block_chunk::anchor,6> block_chunk::OPPOSED_LIST = {{
 }};
 
 block_chunk::block_chunk(utils::wptr<world> pWorld, const vector3i& mPos) :
-    pWorld_(pWorld), mCoordinates_(mPos), bClearNeighborList_(false),
-    uiValidNeighbor_(0u), uiPlainBlockCount_(0u), bBurried_(false),
-    bUpdateCache_(true), /*bUpdateLighting_(false),*/ bBuildOcclusion_(false),
-    bUpdateVBO_(true), bVBOReceived_(true), bVBOCleared_(false), bNew_(false)
+    pWorld_(pWorld), mCoordinates_(mPos)
 {
     for (auto& data : lFaceTranspBlockCount_)
         data = CHUNK_SIZE*CHUNK_SIZE;

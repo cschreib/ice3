@@ -92,7 +92,7 @@ public :
         return x != mVec.x || y != mVec.y;
     }
 
-    float x, y;
+    float x = 0.0, y = 0.0;
 };
 
 inline vector2f operator * (float fValue, const vector2f& mVec) {
@@ -143,7 +143,7 @@ public :
         return x*mVec.x + y*mVec.y;
     }
 
-    int x, y;
+    int x = 0, y = 0;
 };
 
 #endif

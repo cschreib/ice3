@@ -2,7 +2,7 @@
 #include "texture_manager.hpp"
 #include <GL/gl.h>
 
-texture::texture() : uiWidth_(0u), uiHeight_(0u)
+texture::texture()
 {
 }
 

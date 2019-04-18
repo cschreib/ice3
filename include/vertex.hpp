@@ -8,20 +8,20 @@ struct uv_coordinates
     uv_coordinates() {}
     uv_coordinates(float mu, float mv) : u(mu), v(mv) {}
 
-    float u, v;
+    float u = 0.0, v = 0.0;
 };
 
 struct vertex
 {
     vertex() {}
-    vertex(const vector3f& v, const uv_coordinates& u) : pos(v), uv(u), occlusion(0u) {}
+    vertex(const vector3f& v, const uv_coordinates& u) : pos(v), uv(u) {}
     vertex(const vector3f& v, const uv_coordinates& u, uchar o) : pos(v), uv(u), occlusion(o) {}
 
-    vector3f        pos;
+    vector3f       pos;
     uv_coordinates uv;
-    uchar          occlusion;
-    uchar          sunlight;
-    uchar          light;
+    uchar          occlusion = 0;
+    uchar          sunlight = 0;
+    uchar          light = 0;
 };
 
 #endif

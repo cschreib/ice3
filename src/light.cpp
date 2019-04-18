@@ -27,7 +27,7 @@ const std::array<float,256> light::INTENSITY_TABLE = make_intensity_table();
 
 light::light(const std::string& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
     movable(pWorld, vector3f(pChunk.lock()->get_block_position(pBlock))),
-    sName_(sName), pChunk_(pChunk), pBlock_(pBlock), ucIntensity_(255u)
+    sName_(sName), pChunk_(pChunk), pBlock_(pBlock)
 {
 }
 

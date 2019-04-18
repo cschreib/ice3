@@ -30,9 +30,9 @@ private :
 
     int  get_parameter_id_(const std::string& sParam);
 
-    uint uiProgramHandle_;
-    bool bUseFragment_;
-    uint uiTextureBound_;
+    uint uiProgramHandle_ = 0;
+    bool bUseFragment_ = false;
+    uint uiTextureBound_ = 0;
 };
 
 #endif

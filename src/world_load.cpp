@@ -184,7 +184,12 @@ const int    load_chunk_task::iSeed[NUM_SETS] = {2, 654};
 load_chunk_task::load_chunk_task(utils::wptr<world> pWorld) : w(pWorld)
 {
     for (size_t i = 0; i < NUM_SETS; ++i)
-        noise[i] = {dPersistence[i], dFrequency[i], uiOctaves[i], w->get_seed() + iSeed[i]};
+    {
+        noise[i].dPersistence = dPersistence[i];
+        noise[i].dFrequency = dFrequency[i];
+        noise[i].uiOctaves = uiOctaves[i];
+        noise[i].iSeed = w->get_seed() + iSeed[i];
+    }
 }
 
 // Must return a number between 0 and 1

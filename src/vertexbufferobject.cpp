@@ -42,8 +42,6 @@ vbo_data::~vbo_data()
         delete[] reinterpret_cast<vbo_vertex_3*>(pData);
         return;
     }
-
-    throw utils::exception("vbo_data", "unhandled vertex type : "+utils::to_string((int)mType));
 }
 
 void vertex_buffer_object::init_()

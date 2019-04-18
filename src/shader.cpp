@@ -15,9 +15,6 @@ shader::shader(const std::string& sVertexFile)
 
     glew::initialize();
 
-    uiProgramHandle_ = 0;
-    bUseFragment_ = false;
-
     uint uiVertexHandle = compile_vertex_shader_(sVertexFile);
 
     link_program_(uiVertexHandle, 0);
@@ -33,7 +30,6 @@ shader::shader(const std::string& sVertexFile, const std::string& sFragmentFile)
 
     glew::initialize();
 
-    uiProgramHandle_ = 0;
     bUseFragment_ = true;
     uint uiVertexHandle = compile_vertex_shader_(sVertexFile);
     uint uiFragmentHandle = 0;

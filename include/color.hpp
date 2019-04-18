@@ -13,8 +13,7 @@ public :
     color();
     color(chanel nr, chanel ng, chanel nb, chanel na = 1.0f);
 
-    chanel r, g, b, a;
-    //chanel b, g, r, a;
+    chanel r = 0, g = 0, b = 0, a = 0;
 
     void saturate();
 

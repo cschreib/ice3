@@ -201,13 +201,13 @@ public :
         return BLOCK_DATA[mType].ucLightAtten/**Light::ATTEN*/;
     }
 
-    uchar t;
+    uchar t = EMPTY;
 
-    uchar sunlight;
-    uchar light;
-    uchar selflight;
+    uchar sunlight = 0;
+    uchar light = 0;
+    uchar selflight = 0;
 
-    bool open;
+    bool open = false;
 
 private :
 
@@ -221,11 +221,11 @@ private :
 
 struct block_face
 {
-    mutable block* b;
-    block::face    face;
+    mutable block* b = nullptr;
+    block::face    face = block::LEFT;
 
     vertex v1, v2, v3, v4;
-    uchar  sunlight, light, hue;
+    uchar  sunlight = 0, light = 0, hue = 0;
 };
 
 #endif

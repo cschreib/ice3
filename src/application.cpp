@@ -32,7 +32,7 @@ std::ostream& stamp(std::ostream& os)
     return os << (sh + ":" + sm + ":" + ss + ":" + sms + " : ");
 }
 
-application::application() : mLog_("ice3.log"), bMouseGrabbed_(false)
+application::application() : mLog_("ice3.log")
 {
     std::cout << stamp << "Application start." << std::endl;
 }

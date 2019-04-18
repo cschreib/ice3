@@ -51,24 +51,24 @@ protected :
 
     virtual void on_moved_(movable::movement_type mType);
 
-    /*virtual void yaw_(float fYaw);
-    virtual void pitch_(float fPitch);
-    virtual void translate_(const vector3f& mTrans);
-    virtual void translate_world_(const vector3f& mTrans);*/
+    // virtual void yaw_(float fYaw);
+    // virtual void pitch_(float fPitch);
+    // virtual void translate_(const vector3f& mTrans);
+    // virtual void translate_world_(const vector3f& mTrans);
 
-    //void update_block_();
+    // void update_block_();
 
     utils::ustring    sName_;
     utils::wptr<unit> pUnitSelf_;
     std::string       sType_;
 
-    bool bCurrent_;
+    bool bCurrent_ = false;
 
     utils::refptr<node>   pCameraNode_;
-    float                 fTotalPitch_;
+    float                 fTotalPitch_ = 0.0;
 
     std::weak_ptr<block_chunk> pChunk_;
-    block*                     pBlock_;
+    block*                     pBlock_ = nullptr;
 
     vector3f mHeadPosition_;
     cylinder mCylinder_;
@@ -88,9 +88,9 @@ public :
 
 private :
 
-    /*void translate_(const vector3f& mTrans) override;
-    void yaw_(float fYaw) override;
-    void pitch_(float fPitch) override;*/
+    // void translate_(const vector3f& mTrans) override;
+    // void yaw_(float fYaw) override;
+    // void pitch_(float fPitch) override;
 
 };
 

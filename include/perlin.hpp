@@ -5,15 +5,13 @@
 
 struct perlin_noise
 {
-    //perlin_noise();
-
     double operator () (double x, double y) const;
     double operator () (double x, double y, double z) const;
 
-    double dPersistence;
-    double dFrequency;
-    uint   uiOctaves;
-    int    iSeed;
+    double dPersistence = 0.0;
+    double dFrequency = 0.0;
+    uint   uiOctaves = 0;
+    int    iSeed = 0;
 
 private :
 

@@ -215,6 +215,10 @@ std::array<block_data,block::BLOCK_MAX> block::make_block_data_()
 {
     std::array<block_data,block::BLOCK_MAX> data;
 
+    for (uint i = 0; i < block::BLOCK_MAX; ++i) {
+        data[i] = {true, true, false, false, 0.0f, 1};
+    }
+
     //                    Trans, Walk, 2Sided, Alpha, Solid, LightAtt
     data[EMPTY]        = {true,  true,  false, false, 0.0f,   1};
     data[STONE]        = {false, false, false, false, 30.0f,  0};
@@ -247,7 +251,7 @@ void initialize_block_data(texture_manager& mTextureManager)
     block::BLOCK_SELECTED_TEXTURE = mTextureManager.load_texture("textures/selected.png");
 }
 
-block::block() : t(EMPTY), sunlight(0u), light(0u), selflight(0u), open(false)
+block::block()
 {
 }
 

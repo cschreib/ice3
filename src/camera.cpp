@@ -12,15 +12,11 @@
 #undef FAR
 #endif
 
-camera::camera(utils::wptr<world> pWorld) :
-    movable(pWorld), fFOVy_(1.25f), fNear_(0.1f), fFar_(100.0f),
-    fAspectRatio_(1.0f), bUpdateProjMatrix_(true), bUpdateViewMatrix_(true)
+camera::camera(utils::wptr<world> pWorld) : movable(pWorld)
 {
 }
 
-camera::camera(utils::wptr<world> pWorld, const vector3f& mPosition) :
-    movable(pWorld, mPosition), fFOVy_(1.25f), fNear_(0.1f), fFar_(100.0f),
-    fAspectRatio_(1.0f), bUpdateProjMatrix_(true), bUpdateViewMatrix_(true)
+camera::camera(utils::wptr<world> pWorld, const vector3f& mPosition) : movable(pWorld, mPosition)
 {
 }
 

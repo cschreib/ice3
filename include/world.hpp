@@ -158,10 +158,10 @@ public :
 
     struct render_data
     {
-        float fRenderTime, fUpdateTime;
-        uint  uiFrameNbr;
-        uint  uiNumRenderedChunk, uiNumChunk, uiNumRenderedVertex;
-        uint  uiUpdateQueuedChunkCount, uiCreateQueuedChunkCount;
+        float fRenderTime = 0, fUpdateTime = 0;
+        uint  uiFrameNbr = 0;
+        uint  uiNumRenderedChunk = 0, uiNumChunk = 0, uiNumRenderedVertex = 0;
+        uint  uiUpdateQueuedChunkCount = 0, uiCreateQueuedChunkCount = 0;
     };
 
     render_data get_render_data() const;
@@ -209,18 +209,18 @@ private :
 
     std::string sFile_;
     std::string sDirectory_;
-    bool        bEmpty_;
-    bool        bJustLoaded_;
+    bool        bEmpty_ = true;
+    bool        bJustLoaded_ = false;
 
-    int iWorldSeed_;
+    int iWorldSeed_ = 0;
 
     std::shared_ptr<block_chunk>                     pCurrentChunk_;
     std::map<chunk_id, std::shared_ptr<block_chunk>> lLoadedChunkList_;
     std::set<chunk_id>                               lLoadingChunkList_;
     std::vector<block_chunk*>                        lVisibleChunkList_;
-    mutable bool bUpdateVisibleChunkList_;
+    mutable bool bUpdateVisibleChunkList_ = true;
 
-    block*                     pSelectedBlock_;
+    block*                     pSelectedBlock_ = nullptr;
     std::weak_ptr<block_chunk> pSelectedChunk_;
     block::face                mSelectedFace_;
 
@@ -256,29 +256,34 @@ private :
     utils::refptr<save_worker_t>    pSaveWorker_;
     utils::refptr<loader_thread_t>  pLoaderThread_;
 
-    size_t uiNumReceivedChunkPerFrame_;
+    size_t uiNumReceivedChunkPerFrame_ = 5;
 
     mutable render_data mRenderData_;
 
-    float fRenderDistance_;
-    bool bVBOEnabled_, bVBOSupported_, bUseVBO_;
-    bool bShadersEnabled_, bShadersSupported_, bUseShaders_;
+    float fRenderDistance_ = 150.0f;
+    bool bVBOEnabled_ = false, bVBOSupported_ = false, bUseVBO_ = false;
+    bool bShadersEnabled_ = false, bShadersSupported_ = false, bUseShaders_ = false;
     mutable utils::refptr<shader> pBlockShader_;
-    bool bWireframe_, bFog_;
+    bool bWireframe_ = false, bFog_ = false;
 
-    bool bSmoothLighting_;
-    bool bBuildLightingArray_;
-    uint uiLightingArraySize_, uiLightingArrayRatio_;
-    uint uiLightingUpdateRate_;
+    bool bSmoothLighting_ = true;
+    bool bBuildLightingArray_ = true;
+    uint uiLightingArraySize_ = 128, uiLightingArrayRatio_ = 2;
+    uint uiLightingUpdateRate_ = 32;
     utils::refptr<texture> lLightingArray_;
-    bool bSunLight_, bLights_;
+    bool bSunLight_ = true, bLights_ = true;
 
-    color mSunDayColor_, mSunDawnColor_, mSunNightColor_;
-    color mSkyDayColor_, mSkyDawnColor_, mSkyNightColor_;
-    color mSkyColor_,    mSunColor_,     mTorchLight_;
+    color mSunDayColor_   = color(0.90f, 0.96f, 1.0f);
+    color mSunDawnColor_  = color(1.0f, 0.93f, 0.54f);
+    color mSunNightColor_ = color(0.1f, 0.1f, 0.1f);
+    color mSkyDayColor_   = color(0.47f, 0.81f, 0.89f);
+    color mSkyDawnColor_  = color(1.0f, 0.682f, 0.024f);
+    color mSkyNightColor_ = color(0.0f, 0.0f, 0.0f);
+    color mTorchLight_    = color(1.0f, 0.93f, 0.54f);
+    color mSkyColor_, mSunColor_;
 
-    float fDayTime_, fDayDuration_;
-    bool  bDayNightCycle_;
+    float fDayTime_ = 0.0, fDayDuration_ = 60.0;
+    bool  bDayNightCycle_ = true;
 };
 
 #endif

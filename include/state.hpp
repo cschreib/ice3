@@ -8,17 +8,14 @@
 
 struct input_data
 {
-    input_data(utils::refptr<input::handler_impl> handler) :
-        mInput(handler), fDelta(0.1), uiScreenWidth(128), uiScreenHeight(128),
-        bScreenChanged(false)
-    {}
+    input_data(utils::refptr<input::handler_impl> handler) : mInput(std::move(handler)) {}
 
     input::manager mInput;
-    double fDelta;
+    double fDelta = 0.1;
 
-    uint uiScreenWidth;
-    uint uiScreenHeight;
-    bool bScreenChanged;
+    uint uiScreenWidth = 128;
+    uint uiScreenHeight = 128;
+    bool bScreenChanged = false;
 };
 
 class application;
@@ -52,9 +49,9 @@ protected :
 
     utils::wptr<state> pSelf_;
 
-    bool bPaused_;
-    bool bHidden_;
-    bool bShutdown_;
+    bool bPaused_ = false;
+    bool bHidden_ = false;
+    bool bShutdown_ = false;
 };
 
 #endif

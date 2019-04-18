@@ -1,7 +1,7 @@
 #include "state.hpp"
 
 state::state(application& mApp, bool bPlay, bool bShow) :
-    bPaused_(!bPlay), bHidden_(!bShow), bShutdown_(false)
+    bPaused_(!bPlay), bHidden_(!bShow)
 {
 }
 

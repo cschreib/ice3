@@ -31,7 +31,7 @@ public :
     bool operator == (const quaternion& q) const;
     bool operator != (const quaternion& q) const;
 
-    float w, x, y, z;
+    float w = 1.0, x = 0.0, y = 0.0, z = 0.0;
 
     static const quaternion UNIT;
 };

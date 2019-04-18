@@ -2,15 +2,12 @@
 #include <lxgui/utils_string.hpp>
 #include <lxgui/utils_exception.hpp>
 
-movable::movable(utils::wptr<world> pWorld) :
-    pWorld_(pWorld), mPosition_(vector3f::ZERO), mScale_(vector3f::UNIT), mOrientation_(quaternion::UNIT),
-    bInheritScale_(true), bInheritRotation_(true)
+movable::movable(utils::wptr<world> pWorld) : pWorld_(pWorld)
 {
 }
 
 movable::movable(utils::wptr<world> pWorld, const vector3f& mPosition) :
-    pWorld_(pWorld), mPosition_(mPosition), mScale_(vector3f::UNIT), mOrientation_(quaternion::UNIT),
-    bInheritScale_(true), bInheritRotation_(true)
+    pWorld_(pWorld), mPosition_(mPosition)
 {
 }
 
@@ -36,6 +33,10 @@ void movable::set_self(utils::wptr<movable> pSelf)
 
 void movable::set_parent(utils::wptr<movable> pParent)
 {
+    if (pParent == pSelf_) {
+        throw utils::exception("# Error # : movable : cannot set self as parent.");
+    }
+
     if (pParent_ != pParent)
     {
         if (pParent_)

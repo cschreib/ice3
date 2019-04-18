@@ -40,9 +40,9 @@ private :
 
     std::string                sName_;
     std::weak_ptr<block_chunk> pChunk_;
-    block*                     pBlock_;
+    block*                     pBlock_ = nullptr;
 
-    uchar ucIntensity_;
+    uchar ucIntensity_ = 255;
 
 };
 

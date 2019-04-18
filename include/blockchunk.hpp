@@ -18,26 +18,18 @@ struct ray;
 
 struct block_collision_data
 {
-    block_collision_data() : pBlock(nullptr), mFace(block::FRONT), fDist(0.0f) {}
-    block*                       pBlock;
+    block*                       pBlock = nullptr;
     std::shared_ptr<block_chunk> pChunk;
-    block::face                  mFace;
-    float                        fDist;
+    block::face                  mFace = block::FRONT;
+    float                        fDist = 0.0;
 };
 
 struct vertex_cache
 {
-    vertex_cache() :
-        uiNumNormalVertex(0u),
-        uiNumTwoSidedVertex(0u),
-        uiNumAlphaBlendedVertex(0u)
-    {
-    }
-
     std::vector<block_face> lData;
-    uint                    uiNumNormalVertex;
-    uint                    uiNumTwoSidedVertex;
-    uint                    uiNumAlphaBlendedVertex;
+    uint                    uiNumNormalVertex = 0;
+    uint                    uiNumTwoSidedVertex = 0;
+    uint                    uiNumAlphaBlendedVertex = 0;
 };
 
 class block_chunk
@@ -117,7 +109,7 @@ public :
     std::pair<std::weak_ptr<const block_chunk>,const block*> get_block(block::face mFace, const block* pBlock) const;
     std::pair<std::weak_ptr<block_chunk>,block*>             get_block(block::face mFace, block* pBlock);
 
-    //std::vector<std::pair<std::weak_ptr<block_chunk>,block*>> get_surrounding_blocks(const cylinder& mCylinder);
+    // std::vector<std::pair<std::weak_ptr<block_chunk>,block*>> get_surrounding_blocks(const cylinder& mCylinder);
 
     void set_block(const vector3i& mPos, block::type mType);
     void set_block(block* pBlock, block::type mType);
@@ -131,34 +123,34 @@ public :
     bool cast_ray(const ray& mRay, block_collision_data& mData);
 
     void flag_mesh_update(const block* pBlock);
-    /*void flag_light_update(block* pBlock);
-    void flag_light_update();*/
+    // void flag_light_update(block* pBlock);
+    // void flag_light_update();
     void update_texture(block* pBlock);
 
-    /*void                AddLight(utils::refptr<Light> pLight);
-    void                AddLightDelayed(utils::refptr<Light> pLight);
-    void                RemoveLight(utils::wptr<Light> pLight);
-    void                RemoveLight(const std::string& sName);
-    utils::wptr<Light>       GetLight(const std::string& sName);
-    utils::wptr<const Light> GetLight(const std::string& sName) const;
-    void                MoveLight(utils::wptr<Light> pLight, block* pOldblock);
-    void                UpdateLight(utils::wptr<Light> pLight);
-    void                UpdateblockLight(block* pBlock);
+    // void                AddLight(utils::refptr<Light> pLight);
+    // void                AddLightDelayed(utils::refptr<Light> pLight);
+    // void                RemoveLight(utils::wptr<Light> pLight);
+    // void                RemoveLight(const std::string& sName);
+    // utils::wptr<Light>       GetLight(const std::string& sName);
+    // utils::wptr<const Light> GetLight(const std::string& sName) const;
+    // void                MoveLight(utils::wptr<Light> pLight, block* pOldblock);
+    // void                UpdateLight(utils::wptr<Light> pLight);
+    // void                UpdateblockLight(block* pBlock);
 
-    void                PropagateLight();
-    void                SeekLight();
-    void                UpdateSunLightDirect(std::vector<Point<int>>& lRays);
-    void                BuildSunLightDirect();
-    void                PropagateSunLightDirect();
-    void                UpdateSunLightIndirect();*/
+    // void                PropagateLight();
+    // void                SeekLight();
+    // void                UpdateSunLightDirect(std::vector<Point<int>>& lRays);
+    // void                BuildSunLightDirect();
+    // void                PropagateSunLightDirect();
+    // void                UpdateSunLightIndirect();
 
     void                    add_unit(utils::refptr<unit> pUnit);
     void                    remove_unit(utils::wptr<unit> pUnit);
     utils::wptr<unit>       get_unit(const utils::ustring& sName);
     utils::wptr<const unit> get_unit(const utils::ustring& sName) const;
 
-    /*void UpdateLighting() const;
-    void UpdateLighting(std::vector<block_face>& lVertexCache) const;*/
+    // void UpdateLighting() const;
+    // void UpdateLighting(std::vector<block_face>& lVertexCache) const;
     void update_cache() const;
     void update_cache(vertex_cache& lVertexCache) const;
     void build_occlusion() const;
@@ -226,25 +218,25 @@ private :
     std::pair<std::weak_ptr<const block_chunk>,const block*> get_neighbor_block_(block_chunk::anchor mAnchor, size_t id) const;
     const block*                                             get_neighbor_block__(block_chunk::anchor mAnchor, size_t id) const;
 
-    /*void AddNearbySunLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
-    void AddNearbyLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
-    void AddNearbyLightCheckOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
+    // void AddNearbySunLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
+    // void AddNearbyLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
+    // void AddNearbyLightCheckOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
 
-    void PropagateSunLight_(const std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lblockList);
-    void PropagateSunLight_(block* pBlock, uint uiNumblockDown = 0);
-    void PropagateLight_(block* pBlock);
+    // void PropagateSunLight_(const std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lblockList);
+    // void PropagateSunLight_(block* pBlock, uint uiNumblockDown = 0);
+    // void PropagateLight_(block* pBlock);
 
-    void AddNearbySeekSunLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
-    void AddNearbySeekSunLightBorderOpenblocks_(block* pBlock, std::map<uchar, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>>& lEmitterList);
-    void AddNearbySeekSunLightPropOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
-    void AddNearbySeekLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
-    void AddNearbySeekLightBorderOpenblocks_(block* pBlock, std::map<uchar, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>>& lEmitterList);
-    void AddNearbySeekLightPropOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
+    // void AddNearbySeekSunLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
+    // void AddNearbySeekSunLightBorderOpenblocks_(block* pBlock, std::map<uchar, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>>& lEmitterList);
+    // void AddNearbySeekSunLightPropOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
+    // void AddNearbySeekLightOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
+    // void AddNearbySeekLightBorderOpenblocks_(block* pBlock, std::map<uchar, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>>& lEmitterList);
+    // void AddNearbySeekLightPropOpenblocks_(block* pBlock, std::vector<std::pair<std::weak_ptr<block_chunk>,block*>>& lOpenList);
 
-    void SeekSunLight_(block* pBlock, uint uiRange, uint uiNumblockDown = 0);
-    void SeekLight_(block* pBlock, uint uiRange);
+    // void SeekSunLight_(block* pBlock, uint uiRange, uint uiNumblockDown = 0);
+    // void SeekLight_(block* pBlock, uint uiRange);
 
-    utils::wptr<Light> GetBrightestLight_(block* pBlock);*/
+    // utils::wptr<Light> GetBrightestLight_(block* pBlock);
 
     void add_transparent_block_(block_chunk::anchor mAnchor);
     void remove_transparent_block_(block_chunk::anchor mAnchor);
@@ -266,35 +258,35 @@ private :
     vector3i mCoordinates_;
 
     std::array<std::weak_ptr<block_chunk>,6> lNeighborList_;
-    mutable bool                             bClearNeighborList_;
-    uint                                     uiValidNeighbor_;
+    mutable bool                             bClearNeighborList_ = false;
+    uint                                     uiValidNeighbor_ = 0;
 
     std::array<block, CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE> lBlockList_;
-    uint               uiPlainBlockCount_;
+    uint               uiPlainBlockCount_ = 0;
     std::array<uint,6> lFaceTranspBlockCount_;
 
-    bool         bVisible_;
-    mutable bool bBurried_;
+    bool         bVisible_ = false;
+    mutable bool bBurried_ = false;
 
-    /*std::map<std::string,utils::refptr<Light>> lLightList_;
-    bool                                       bNoSunLight_;
-    bool                                       bFullSunLight_;*/
+    // std::map<std::string,utils::refptr<Light>> lLightList_;
+    // bool                                       bNoSunLight_;
+    // bool                                       bFullSunLight_;
 
     std::map<utils::ustring, utils::refptr<unit>> lUnitList_;
 
-    mutable bool         bUpdateCache_;
-    /*mutable bool         bUpdateLighting_;*/
-    mutable bool         bBuildOcclusion_;
+    mutable bool         bUpdateCache_ = true;
+    // mutable bool         bUpdateLighting_ = false;
+    mutable bool         bBuildOcclusion_ = false;
     mutable vertex_cache mVertexCache_;
 
-    mutable bool                                bUpdateVBO_;
-    mutable bool                                bVBOReceived_;
-    mutable bool                                bVBOCleared_;
+    mutable bool                                bUpdateVBO_ = true;
+    mutable bool                                bVBOReceived_ = true;
+    mutable bool                                bVBOCleared_ = false;
     mutable utils::refptr<vertex_buffer_object> pNormalVBO_;
     mutable utils::refptr<vertex_buffer_object> pTwoSidedVBO_;
     mutable utils::refptr<vertex_buffer_object> pAlphaBlendedVBO_;
 
-    mutable bool bNew_;
+    mutable bool bNew_ = false;
 };
 
 struct chunk_id

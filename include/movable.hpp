@@ -67,12 +67,12 @@ protected :
     utils::wptr<movable>              pParent_;
     std::vector<utils::wptr<movable>> lChildList_;
 
-    vector3f   mPosition_;
-    vector3f   mScale_;
-    quaternion mOrientation_;
+    vector3f   mPosition_ = vector3f::ZERO;
+    vector3f   mScale_ = vector3f::UNIT;
+    quaternion mOrientation_ = quaternion::UNIT;
 
-    bool bInheritScale_;
-    bool bInheritRotation_;
+    bool bInheritScale_ = true;
+    bool bInheritRotation_ = true;
 
 };
 

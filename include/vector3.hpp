@@ -153,7 +153,7 @@ struct vector3f
     /// (1/sqrt(3), 1/sqrt(3), 1/sqrt(3))
     static const vector3f UNIT_XYZ;
 
-    float x, y, z;
+    float x = 0.0, y = 0.0, z = 0.0;
 };
 
 inline vector3f operator * (float fLeft, const vector3f& mRight) {
@@ -231,7 +231,7 @@ struct vector3i
     /// (0, 1, 1)
     static const vector3i UNIT_YZ;
 
-    int x, y, z;
+    int x = 0, y = 0, z = 0;
 };
 
 inline vector3f operator * (float fLeft, const vector3i& mRight) {

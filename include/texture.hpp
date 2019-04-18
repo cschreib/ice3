@@ -21,7 +21,7 @@ public:
         explicit color(const ::color& c) :
             r(c.r*255), g(c.g*255), b(c.b*255), a(c.a*255) {}
 
-        chanel r, g, b, a;
+        chanel r = 0, g = 0, b = 0, a = 0;
 
         static const color WHITE;
         static const color BLACK;
@@ -69,9 +69,9 @@ public:
 
 private:
 
-    uint uiWidth_;
-    uint uiHeight_;
-    uint uiTextureHandle_;
+    uint uiWidth_ = 0;
+    uint uiHeight_ = 0;
+    uint uiTextureHandle_ = 0;
 
     std::vector<texture::color> pData_;
 };

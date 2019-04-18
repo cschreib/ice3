@@ -24,8 +24,8 @@ public :
     void operator -= (const vector3f& mAdd);
 
     vector3f pos;
-    float    radius;
-    float    height;
+    float    radius = 0.0;
+    float    height = 0.0;
 };
 
 #endif
