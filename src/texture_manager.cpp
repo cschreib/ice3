@@ -4,6 +4,7 @@
 #include <png.h>
 #include <fstream>
 #include <iostream>
+#include <memory>
 
 texture_manager::texture_manager()
 {
@@ -100,7 +101,7 @@ utils::refptr<texture> texture_manager::load_texture(const std::string& sFile)
         png_uint_32 uiWidth  = png_get_image_width(pReadStruct, pInfoStruct);
         png_uint_32 uiHeight = png_get_image_height(pReadStruct, pInfoStruct);
 
-        utils::refptr<png_bytep> pRows(new png_bytep[uiHeight]);
+        std::unique_ptr<png_bytep[]> pRows(new png_bytep[uiHeight]);
         utils::refptr<texture>   pTex(new texture(uiWidth, uiHeight));
 
         png_bytep*      pTempRows = pRows.get();
