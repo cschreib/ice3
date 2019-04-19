@@ -22,6 +22,12 @@ class application;
 
 class state
 {
+    friend class application;
+
+    void mark_for_deletion_();
+    bool is_marked_for_deletion_() const;
+    bool bMarkedForDeletion_ = false;
+
 public :
 
     state(application& mApp, bool bPlay, bool bShow);

@@ -39,14 +39,15 @@ public :
         return iter->second.get<T>();
     }
 
-    void           pop_state(utils::wptr<state> pState);
+    void           pop_state(state& pState);
 
     template<class T, typename ... Args>
-    utils::wptr<T> push_state(Args... args)
+    T& push_state(Args... args)
     {
-        utils::refptr<T> p(new T(*this, args...));
-        push_state_(p);
-        return p;
+        std::unique_ptr<T> p(new T(*this, args...));
+        T& obj = *p;
+        push_state_(std::move(p));
+        return obj;
     }
 
     void start();
@@ -73,7 +74,7 @@ private :
         std::streambuf* pSavedBuffer_;
     };
 
-    void push_state_(utils::refptr<state> pState);
+    void push_state_(std::unique_ptr<state> pState);
 
     std::map<std::string, lua::var> lDefaultGameOptionList_;
     std::map<std::string, lua::var> lGameOptionList_;
@@ -87,7 +88,7 @@ private :
 
     mutable utils::refptr<input_data> pInputData_;
 
-    std::deque<utils::refptr<state>> lStateStack_;
+    std::vector<std::unique_ptr<state>> lStateStack_;
 
     sf::Window mWindow_;
 

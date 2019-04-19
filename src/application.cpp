@@ -250,22 +250,14 @@ bool application::is_constant_defined(const std::string& sConstantName) const
     return (lGameOptionList_.find(sConstantName) != lGameOptionList_.end());
 }
 
-void application::pop_state(utils::wptr<state> pState)
+void application::pop_state(state& mState)
 {
-    std::deque<utils::refptr<state>>::iterator iter;
-    foreach (iter, lStateStack_)
-    {
-        if (pState == *iter)
-        {
-            lStateStack_.erase(iter);
-            break;
-        }
-    }
+    mState.mark_for_deletion_();
 }
 
-void application::push_state_(utils::refptr<state> pState)
+void application::push_state_(std::unique_ptr<state> pState)
 {
-    lStateStack_.push_back(pState);
+    lStateStack_.push_back(std::move(pState));
 }
 
 void application::start()
@@ -324,21 +316,35 @@ void application::start()
         pInputData_->mInput.get_handler().update();
         pInputData_->mInput.update(pInputData_->fDelta);
 
-        std::deque<utils::refptr<state>>::iterator iterState;
-        std::deque<utils::refptr<state>> lTempStateStack = lStateStack_;
-        foreach (iterState, lTempStateStack)
-        {
-            if (!(*iterState)->is_paused())
-                (*iterState)->update(*pInputData_);
+        // Make a temporary copy of the state stack, which we use for iteration
+        // To make sure the stack we iterate on doesn't get modified by new states
+        // being pushed
+        std::vector<state*> lTempStack;
+        for (auto& pState : lStateStack_) {
+            lTempStack.push_back(pState.get());
+        }
 
-            if ((*iterState)->is_asking_for_shutdown())
+        for (auto& pState : lTempStack)
+        {
+            if (!pState->is_paused())
+                pState->update(*pInputData_);
+
+            if (pState->is_asking_for_shutdown())
                 bRunning = false;
         }
 
-        foreach (iterState, lTempStateStack)
+        for (auto& pState : lTempStack)
         {
-            if ((*iterState)->is_shown())
-                (*iterState)->render();
+            if (pState->is_shown())
+                pState->render();
+        }
+
+        // Delete states that were marked for deletion
+        std::vector<std::unique_ptr<state>>::iterator iter;
+        foreach (iter, lStateStack_) {
+            if ((*iter)->is_marked_for_deletion_()) {
+                iter = lStateStack_.erase(iter);
+            }
         }
 
         mWindow_.display();

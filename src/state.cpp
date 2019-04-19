@@ -8,6 +8,13 @@ state::state(application& mApp, bool bPlay, bool bShow) :
 state::~state()
 {
 }
+void state::mark_for_deletion_() {
+    bMarkedForDeletion_ = true;
+}
+
+bool state::is_marked_for_deletion_() const {
+    return bMarkedForDeletion_;
+}
 
 void state::pause()
 {
