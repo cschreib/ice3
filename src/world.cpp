@@ -262,6 +262,19 @@ void world::update(input_data& mData)
                 mGUIManager_.enable_input(false);
             }
         }
+
+        if (mData.mInput.key_is_pressed(input::key::K_F1))
+        {
+            toggle_vbos();
+        }
+        if (mData.mInput.key_is_pressed(input::key::K_F2))
+        {
+            toggle_shaders();
+        }
+        if (mData.mInput.key_is_pressed(input::key::K_F3))
+        {
+            toggle_smooth_lighting();
+        }
     }
 
     receive_loaded_chunks_();
