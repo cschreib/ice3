@@ -153,7 +153,7 @@ void application::read_config()
 
     sLocale_ = get_constant<std::string>("game_locale");
 
-    pInputData_ = utils::refptr<input_data>(new input_data(
+    pInputData_ = std::unique_ptr<input_data>(new input_data(
     #ifdef USE_OIS
         utils::refptr<input::handler_impl>(new input::ois_handler(
             utils::to_string((uint)mWindow_.getSystemHandle()), mWindow_.getSize().x, mWindow_.getSize().y)

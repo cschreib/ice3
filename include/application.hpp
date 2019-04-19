@@ -86,7 +86,7 @@ private :
     uint uiScreenWidth_ = 0;
     uint uiScreenHeight_ = 0;
 
-    mutable utils::refptr<input_data> pInputData_;
+    mutable std::unique_ptr<input_data> pInputData_;
 
     std::vector<std::unique_ptr<state>> lStateStack_;
 
