@@ -53,7 +53,7 @@ void world::render()
     if (bFog_)
         glDisable(GL_FOG);
 
-    pGUIManager_->render_ui();
+    mGUIManager_.render_ui();
 
     mRenderData_.fRenderTime += c.getElapsedTime().asSeconds();
 }

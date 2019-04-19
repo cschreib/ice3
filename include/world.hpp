@@ -201,8 +201,8 @@ private :
 
     application& mApp_;
 
-    texture_manager             mTextureManager_;
-    utils::refptr<gui::manager> pGUIManager_;
+    texture_manager mTextureManager_;
+    gui::manager    mGUIManager_;
 
     std::string sFile_;
     std::string sDirectory_;
@@ -248,10 +248,10 @@ private :
         save_chunk_task
     > save_worker_t;
 
-    utils::refptr<updater_thread_t> pUpdaterThread_;
-    utils::refptr<load_worker_t>    pLoadWorker_;
-    utils::refptr<save_worker_t>    pSaveWorker_;
-    utils::refptr<loader_thread_t>  pLoaderThread_;
+    std::unique_ptr<updater_thread_t> pUpdaterThread_;
+    std::unique_ptr<load_worker_t>    pLoadWorker_;
+    std::unique_ptr<save_worker_t>    pSaveWorker_;
+    std::unique_ptr<loader_thread_t>  pLoaderThread_;
 
     size_t uiNumReceivedChunkPerFrame_ = 5;
 

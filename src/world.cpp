@@ -22,7 +22,13 @@
 void register_glues(lua::state& mState);
 
 world::world(application& mApp, bool bPlay, bool bShow) :
-    state(mApp, bPlay, bShow), mApp_(mApp),
+    state(mApp, bPlay, bShow), mApp_(mApp), mGUIManager_(
+        mApp_.get_input_data().mInput.get_handler(),
+        mApp_.get_locale(),
+        mApp_.get_window().getSize().x,
+        mApp_.get_window().getSize().y,
+        utils::refptr<gui::manager_impl>(new gui::gl::manager())
+    ),
     pUpdaterThread_(new updater_thread_t),
     pLoadWorker_(new load_worker_t(*this)), pSaveWorker_(new save_worker_t(*this)),
     pLoaderThread_(new loader_thread_t(*pLoadWorker_, *pSaveWorker_))
@@ -37,24 +43,16 @@ world::world(application& mApp, bool bPlay, bool bShow) :
 
     std::cout << stamp << " Loading GUI..." << std::endl;
 
-    const sf::Window& mWindow = mApp_.get_window();
-
     gui::out.rdbuf(std::cout.rdbuf());
-    pGUIManager_ = utils::refptr<gui::manager>(new gui::manager(
-        mApp_.get_input_data().mInput.get_handler(),
-        mApp_.get_locale(),
-        mWindow.getSize().x,
-        mWindow.getSize().y,
-        utils::refptr<gui::manager_impl>(new gui::gl::manager())
-    ));
-    pGUIManager_->add_addon_directory("interface/addons");
-    pGUIManager_->create_lua([this]() {
-        pGUIManager_->register_region_type<gui::texture>("Texture");
-        pGUIManager_->register_region_type<gui::font_string>("FontString");
-        pGUIManager_->register_frame_type<gui::button>("Button");
-        pGUIManager_->register_frame_type<gui::edit_box>("EditBox");
 
-        utils::refptr<lua::state> pLua = pGUIManager_->get_lua().lock();
+    mGUIManager_.add_addon_directory("interface/addons");
+    mGUIManager_.create_lua([this]() {
+        mGUIManager_.register_region_type<gui::texture>("Texture");
+        mGUIManager_.register_region_type<gui::font_string>("FontString");
+        mGUIManager_.register_frame_type<gui::button>("Button");
+        mGUIManager_.register_frame_type<gui::edit_box>("EditBox");
+
+        utils::refptr<lua::state> pLua = mGUIManager_.get_lua().lock();
 
         pLua->do_file("key_codes.lua");
         pLua->push_userdata(this);
@@ -62,8 +60,8 @@ world::world(application& mApp, bool bPlay, bool bShow) :
 
         register_glues(*pLua);
     });
-    pGUIManager_->read_files();
-    pGUIManager_->enable_caching(true);
+    mGUIManager_.read_files();
+    mGUIManager_.enable_caching(true);
     std::cout << stamp << " Done." << std::endl;
 
     mRenderData_.uiFrameNbr = 0;
@@ -248,7 +246,7 @@ void world::update(input_data& mData)
             ask_shutdown();
 
         /*if (mData.mInput.key_is_pressed(input::key::K_P))
-            std::cout << pGUIManager_->print_ui() << std::endl;*/
+            std::cout << mGUIManager_.print_ui() << std::endl;*/
 
         if (mData.mInput.key_is_pressed(input::key::K_LSHIFT) ||
             mData.mInput.key_is_pressed(input::key::K_RSHIFT))
@@ -257,13 +255,13 @@ void world::update(input_data& mData)
             {
                 mApp_.grab_mouse(false);
                 mData.mInput.block_input("UNIT");
-                pGUIManager_->enable_input(true);
+                mGUIManager_.enable_input(true);
             }
             else
             {
                 mApp_.grab_mouse(true);
                 mData.mInput.allow_input("UNIT");
-                pGUIManager_->enable_input(false);
+                mGUIManager_.enable_input(false);
             }
         }
     }
@@ -282,8 +280,8 @@ void world::update(input_data& mData)
 
     select_block_in_ray(pCamera_->get_mouse_ray(0.5f, 0.5f));
 
-    pGUIManager_->update(mData.fDelta);
-    mData.mInput.set_focus(pGUIManager_->get_input_manager()->is_focused());
+    mGUIManager_.update(mData.fDelta);
+    mData.mInput.set_focus(mGUIManager_.get_input_manager()->is_focused());
 
     mRenderData_.fUpdateTime += c.getElapsedTime().asSeconds();
 }
