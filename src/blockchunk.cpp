@@ -1021,7 +1021,7 @@ void block_chunk::optimize_cache_(vertex_cache& mVertexCache) const
 
 }
 
-void block_chunk::set_normal_vbo_data(utils::refptr<vbo_data> pData) const
+void block_chunk::set_normal_vbo_data(std::unique_ptr<vbo_data> pData) const
 {
     if (bVBOCleared_)
         return;
@@ -1034,10 +1034,10 @@ void block_chunk::set_normal_vbo_data(utils::refptr<vbo_data> pData) const
     if (pNormalVBO_)
         pNormalVBO_->set_data(*pData);
     else
-        pNormalVBO_ = utils::refptr<vertex_buffer_object>(new vertex_buffer_object(*pData));
+        pNormalVBO_ = std::unique_ptr<vertex_buffer_object>(new vertex_buffer_object(*pData));
 }
 
-void block_chunk::set_two_sided_vbo_data(utils::refptr<vbo_data> pData) const
+void block_chunk::set_two_sided_vbo_data(std::unique_ptr<vbo_data> pData) const
 {
     if (bVBOCleared_)
         return;
@@ -1050,10 +1050,10 @@ void block_chunk::set_two_sided_vbo_data(utils::refptr<vbo_data> pData) const
     if (pTwoSidedVBO_)
         pTwoSidedVBO_->set_data(*pData);
     else
-        pTwoSidedVBO_ = utils::refptr<vertex_buffer_object>(new vertex_buffer_object(*pData));
+        pTwoSidedVBO_ = std::unique_ptr<vertex_buffer_object>(new vertex_buffer_object(*pData));
 }
 
-void block_chunk::set_alpha_blended_vbo_data(utils::refptr<vbo_data> pData) const
+void block_chunk::set_alpha_blended_vbo_data(std::unique_ptr<vbo_data> pData) const
 {
     if (bVBOCleared_)
         return;
@@ -1066,7 +1066,7 @@ void block_chunk::set_alpha_blended_vbo_data(utils::refptr<vbo_data> pData) cons
     if (pAlphaBlendedVBO_)
         pAlphaBlendedVBO_->set_data(*pData);
     else
-        pAlphaBlendedVBO_ = utils::refptr<vertex_buffer_object>(new vertex_buffer_object(*pData));
+        pAlphaBlendedVBO_ = std::unique_ptr<vertex_buffer_object>(new vertex_buffer_object(*pData));
 }
 
 void block_chunk::move_vertex_cache(const vector3f& mDiff, std::vector<block_face>& lVertexCache) const
@@ -1237,30 +1237,32 @@ void block_chunk::flag_update_collision_faces_(const block* pBlock)
     return lblocks;
 }*/
 
-void block_chunk::add_unit(utils::refptr<unit> pUnit)
+void block_chunk::add_unit(std::unique_ptr<unit> pUnit)
 {
-    lUnitList_[pUnit->get_name()] = pUnit;
+    lUnitList_[pUnit->get_name()] = std::move(pUnit);
 }
 
-void block_chunk::remove_unit(utils::wptr<unit> pUnit)
+void block_chunk::transfer_unit_ownership(unit& mUnit, block_chunk& mDest)
 {
-    lUnitList_.erase(pUnit->get_name());
+    auto iter = lUnitList_.find(mUnit.get_name());
+    mDest.add_unit(std::move(iter->second));
+    lUnitList_.erase(iter);
 }
 
-utils::wptr<unit> block_chunk::get_unit(const utils::ustring& sName)
+unit* block_chunk::get_unit(const utils::ustring& sName)
 {
-    std::map<utils::ustring, utils::refptr<unit>>::iterator iter = lUnitList_.find(sName);
+    std::map<utils::ustring, std::unique_ptr<unit>>::iterator iter = lUnitList_.find(sName);
     if (iter != lUnitList_.end())
-        return iter->second;
+        return iter->second.get();
     else
         return nullptr;
 }
 
-utils::wptr<const unit> block_chunk::get_unit(const utils::ustring& sName) const
+const unit* block_chunk::get_unit(const utils::ustring& sName) const
 {
-    std::map<utils::ustring, utils::refptr<unit>>::const_iterator iter = lUnitList_.find(sName);
+    std::map<utils::ustring, std::unique_ptr<unit>>::const_iterator iter = lUnitList_.find(sName);
     if (iter != lUnitList_.end())
-        return iter->second;
+        return iter->second.get();
     else
         return nullptr;
 }
@@ -1288,9 +1290,9 @@ void block_chunk::update_burried_state_() const
     }
 }
 
-utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face>& lVertexCache, uint uiOffset, uint uiNum) const
+std::unique_ptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face>& lVertexCache, uint uiOffset, uint uiNum) const
 {
-    utils::refptr<vbo_data> pData;
+    std::unique_ptr<vbo_data> pData;
 
     uint uiNumFace;
     if (uiNum == uint(-1))
@@ -1304,7 +1306,7 @@ utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face
     {
         if (!mWorld_.is_smooth_lighting_enabled())
         {
-            pData = utils::refptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_3::TYPE));
+            pData = std::unique_ptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_3::TYPE));
             vbo_vertex_3* lArray = reinterpret_cast<vbo_vertex_3*>(pData->pData);
 
             for (uint i = 0; i < uiNumFace; ++i)
@@ -1331,7 +1333,7 @@ utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face
         }
         else
         {
-            pData = utils::refptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_2::TYPE));
+            pData = std::unique_ptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_2::TYPE));
             vbo_vertex_2* lArray = reinterpret_cast<vbo_vertex_2*>(pData->pData);
 
             for (uint i = 0; i < uiNumFace; ++i)
@@ -1360,7 +1362,7 @@ utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face
     }
     else
     {
-        pData = utils::refptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_1::TYPE));
+        pData = std::unique_ptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_1::TYPE));
         vbo_vertex_1* lArray = reinterpret_cast<vbo_vertex_1*>(pData->pData);
 
         if (!mWorld_.is_smooth_lighting_enabled())
@@ -1435,7 +1437,7 @@ void block_chunk::updade_vbo_() const
 {
     bUpdateVBO_ = false;
 
-    utils::refptr<vbo_data> pNormalData;
+    std::unique_ptr<vbo_data> pNormalData;
     if (mVertexCache_.uiNumNormalVertex != 0u)
     {
         pNormalData = make_vbo_data_(mVertexCache_.lData,
@@ -1443,7 +1445,7 @@ void block_chunk::updade_vbo_() const
         );
     }
 
-    utils::refptr<vbo_data> pTwoSidedData;
+    std::unique_ptr<vbo_data> pTwoSidedData;
     if (mVertexCache_.uiNumTwoSidedVertex != 0u)
     {
         pTwoSidedData = make_vbo_data_(mVertexCache_.lData,
@@ -1452,7 +1454,7 @@ void block_chunk::updade_vbo_() const
         );
     }
 
-    utils::refptr<vbo_data> pAlphaBlendedData;
+    std::unique_ptr<vbo_data> pAlphaBlendedData;
     if (mVertexCache_.uiNumAlphaBlendedVertex != 0u)
     {
         pAlphaBlendedData = make_vbo_data_(mVertexCache_.lData,
@@ -1462,9 +1464,9 @@ void block_chunk::updade_vbo_() const
         );
     }
 
-    set_normal_vbo_data(pNormalData);
-    set_two_sided_vbo_data(pTwoSidedData);
-    set_alpha_blended_vbo_data(pAlphaBlendedData);
+    set_normal_vbo_data(std::move(pNormalData));
+    set_two_sided_vbo_data(std::move(pTwoSidedData));
+    set_alpha_blended_vbo_data(std::move(pAlphaBlendedData));
 }
 
 void block_chunk::build_occlusion() const

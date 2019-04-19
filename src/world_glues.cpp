@@ -170,7 +170,7 @@ int l_get_current_unit_pos(lua_State* pLua)
     world* pWorld = pState->get_userdata<world>();
     pState->pop();
 
-    utils::refptr<unit> pUnit = pWorld->get_current_unit().lock();
+    unit* pUnit = pWorld->get_current_unit();
     if (!pUnit)
     {
         pState->push_nil(6);

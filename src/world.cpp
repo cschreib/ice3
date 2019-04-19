@@ -30,7 +30,7 @@ world::world(application& mApp, bool bPlay, bool bShow) :
         mApp_.get_window().getSize().y,
         utils::refptr<gui::manager_impl>(new gui::gl::manager())
     ),
-    pUpdaterThread_(new updater_thread_t),
+    pCamera_(new camera(*this)), pUpdaterThread_(new updater_thread_t),
     pLoadWorker_(new load_worker_t(*this)), pSaveWorker_(new save_worker_t(*this)),
     pLoaderThread_(new loader_thread_t(*pLoadWorker_, *pSaveWorker_)),
     mLightingArray_(
@@ -87,8 +87,6 @@ world::world(application& mApp, bool bPlay, bool bShow) :
         std::cout << stamp << " Done." << std::endl;
     }
 
-    pCamera_ = utils::refptr<camera>(new camera(*this));
-    pCamera_->set_self(pCamera_);
     pCamera_->set_on_moved_listener(std::bind(&world::on_camera_moved_, this, std::placeholders::_1));
 
     std::cout << stamp << " Creating threads..." << std::endl;
@@ -108,7 +106,7 @@ world::world(application& mApp, bool bPlay, bool bShow) :
         U"TheAlmighty", pCurrentChunk_, pCurrentChunk_->get_block(
             block_chunk::to_block_pos(mStartPos)
         )
-    ).lock();
+    );
     control_unit(pGod_);
 }
 
@@ -178,7 +176,6 @@ void world::clear()
     pLoaderThread_->abort();
     pUpdaterThread_->abort();
 
-    lUnitLookupList_.clear();
     lRegisteredUnitList_.clear();
     pGod_ = nullptr;
     control_unit(nullptr);
@@ -503,70 +500,56 @@ void world::on_camera_moved_(movable::movement_type mType)
     flag_update_visible_chunk_list();
 }
 
-utils::wptr<unit> world::get_unit(const utils::ustring& sName)
+unit* world::get_unit(const utils::ustring& sName)
 {
-    std::map<utils::ustring, utils::wptr<unit>>::iterator iter = lRegisteredUnitList_.find(sName);
+    std::map<utils::ustring, unit*>::iterator iter = lRegisteredUnitList_.find(sName);
     if (iter != lRegisteredUnitList_.end())
         return iter->second;
 
     return nullptr;
 }
 
-utils::wptr<const unit> world::get_unit(const utils::ustring& sName) const
+const unit* world::get_unit(const utils::ustring& sName) const
 {
-    std::map<utils::ustring, utils::wptr<unit>>::const_iterator iter = lRegisteredUnitList_.find(sName);
+    std::map<utils::ustring, unit*>::const_iterator iter = lRegisteredUnitList_.find(sName);
     if (iter != lRegisteredUnitList_.end())
         return iter->second;
 
     return nullptr;
 }
 
-utils::wptr<unit> world::get_current_unit()
+unit* world::get_current_unit()
 {
     return pCurrentUnit_;
 }
 
-void world::notify_unit_loaded(utils::wptr<unit> pUnit)
+void world::notify_unit_loaded(unit& mUnit)
 {
-    lRegisteredUnitList_[pUnit->get_name()] = pUnit;
+    lRegisteredUnitList_[mUnit.get_name()] = &mUnit;
 }
 
-void world::notify_unit_unloaded(utils::wptr<unit> pUnit)
+void world::notify_unit_unloaded(unit& mUnit)
 {
-    lRegisteredUnitList_.erase(pUnit->get_name());
+    lRegisteredUnitList_.erase(mUnit.get_name());
 }
 
-void world::notify_unit_created(utils::wptr<unit> pUnit)
+void world::control_unit(unit* pUnit)
 {
-    lUnitLookupList_.insert(pUnit->get_name());
-}
-
-void world::notify_unit_destroyed(utils::wptr<unit> pUnit)
-{
-    lUnitLookupList_.erase(pUnit->get_name());
-}
-
-void world::control_unit(utils::wptr<unit> pUnit)
-{
-    utils::refptr<unit> pCurrent = pCurrentUnit_.lock();
-    utils::refptr<unit> pNew = pUnit.lock();
-
-    if (pNew == pCurrent)
+    if (pUnit == pCurrentUnit_)
         return;
 
-    if (pCurrent)
-        pCurrent->notify_current(false);
+    if (pCurrentUnit_)
+        pCurrentUnit_->notify_current(false);
 
     pCurrentUnit_ = pUnit;
-    pCurrent = pNew;
 
-    if (pCurrent)
+    if (pCurrentUnit_)
     {
-        pCamera_->set_parent(pCurrent->get_camera_anchor());
+        pCamera_->set_parent(&pCurrentUnit_->get_camera_anchor());
         pCamera_->set_position(vector3f::ZERO);
         pCamera_->set_scale(vector3f::UNIT);
         pCamera_->set_orientation(quaternion::UNIT);
-        pCurrent->notify_current(true);
+        pCurrentUnit_->notify_current(true);
     }
     else
     {
@@ -646,9 +629,9 @@ void world::reload_shaders_()
     if (bUseShaders_)
     {
         if (bSmoothLighting_)
-            pBlockShader_ = utils::refptr<shader>(new shader("shaders/block_smooth_vs.glsl", "shaders/block_smooth_fs.glsl"));
+            pBlockShader_ = std::shared_ptr<shader>(new shader("shaders/block_smooth_vs.glsl", "shaders/block_smooth_fs.glsl"));
         else
-            pBlockShader_ = utils::refptr<shader>(new shader("shaders/block_vs.glsl", "shaders/block_fs.glsl"));
+            pBlockShader_ = std::shared_ptr<shader>(new shader("shaders/block_vs.glsl", "shaders/block_fs.glsl"));
 
         if (!pBlockShader_)
         {
@@ -741,7 +724,7 @@ void world::add_chunk(std::shared_ptr<block_chunk> pChunk)
     lLoadedChunkList_.insert(std::make_pair(mID, pChunk));
 
     /*PackedID mTopID(pChunk->iX_, 0, pChunk->iZ_);
-    std::map<PackedID, utils::wptr<BlockChunk>>::iterator iterTop = lTopChunkList_.find(mTopID);
+    std::map<PackedID, std::weak_ptr<BlockChunk>>::iterator iterTop = lTopChunkList_.find(mTopID);
     if (iterTop != lTopChunkList_.End())
     {
         if (iterTop->second->iY_ < pChunk->iY_)

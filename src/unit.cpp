@@ -7,25 +7,18 @@
 
 unit::unit(const utils::ustring& sName, world& mWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
     movable(mWorld, vector3f(pChunk.lock()->get_block_position(pBlock))),
-    sName_(sName), pChunk_(pChunk), pBlock_(pBlock)
+    sName_(sName), mCameraNode_(mWorld_), pChunk_(pChunk), pBlock_(pBlock)
 {
-    pCameraNode_ = utils::refptr<node>(new node(mWorld_));
-    pCameraNode_->set_self(pCameraNode_);
+    mCameraNode_.set_parent(this);
 
     sType_ = "UNIT";
+
+    mWorld_.notify_unit_loaded(*this);
 }
 
 unit::~unit()
 {
-    mWorld_.notify_unit_unloaded(pUnitSelf_);
-}
-
-void unit::set_self(utils::wptr<movable> pSelf)
-{
-    movable::set_self(pSelf);
-    pCameraNode_->set_parent(pSelf);
-    pUnitSelf_ = utils::wptr<unit>::dyn_cast(pSelf);
-    mWorld_.notify_unit_loaded(pUnitSelf_);
+    mWorld_.notify_unit_unloaded(*this);
 }
 
 void unit::notify_current(bool bCurrent)
@@ -77,7 +70,7 @@ bool unit::occupies_block(const std::pair<std::weak_ptr<const block_chunk>,const
 
 void unit::translate(const vector3f& mTrans)
 {
-    movable::translate(pCameraNode_->get_absolute_orientation()*mTrans);
+    movable::translate(mCameraNode_.get_absolute_orientation()*mTrans);
 }
 
 void unit::yaw(float fYaw)
@@ -98,7 +91,7 @@ void unit::pitch(float fPitch)
     fTotalPitch_ += fPitch;
     if (fTotalPitch_ < -1.57f) fTotalPitch_ = -1.57f;
     if (fTotalPitch_ > +1.57f) fTotalPitch_ = +1.57f;
-    pCameraNode_->set_orientation(quaternion(vector3f::UNIT_X, fTotalPitch_));
+    mCameraNode_.set_orientation(quaternion(vector3f::UNIT_X, fTotalPitch_));
 }
 
 void unit::roll(float fRoll)
@@ -126,14 +119,11 @@ void unit::on_moved_(movable::movement_type mType)
         if (!pNewChunk)
             return;
 
-        utils::refptr<unit> pSelfLocked = pUnitSelf_.lock();
-
-        pChunkLocked->remove_unit(pUnitSelf_);
+        pChunkLocked->transfer_unit_ownership(*this, *pNewChunk);
         pChunk_ = pNewChunk;
         mPosition_ += block_chunk::get_difference(pNewChunk, pChunkLocked);
         pChunkLocked = pNewChunk;
         pBlock_ = pChunkLocked->get_block(mBPos);
-        pChunkLocked->add_unit(pSelfLocked);
 
         if (bCurrent_)
             mWorld_.set_current_chunk(pChunk_);
@@ -232,7 +222,7 @@ void god::update(input_data& mData)
             {
                 if (pChunk != pChunk_)
                 {
-                    utils::refptr<unit> pSelfLocked = pSelf_.lock();
+                    std::shared_ptr<unit> pSelfLocked = pSelf_.lock();
 
                     pChunk_->Removeunit(pSelf_);
 

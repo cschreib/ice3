@@ -35,12 +35,6 @@ light::~light()
 {
 }
 
-void light::set_self(utils::wptr<movable> pMovable)
-{
-    movable::set_self(pMovable);
-    pLightSelf_ = utils::wptr<light>::dyn_cast(pMovable);
-}
-
 void light::set_intensity(uchar ucIntensity)
 {
     if (ucIntensity_ != ucIntensity)
@@ -78,8 +72,7 @@ void light::on_moved_(movable::movement_type mType)
         if (!pNewChunk)
             return;
 
-        utils::refptr<light> pSelfLocked = pLightSelf_.lock();
-
+        // std::shared_ptr<light> pSelfLocked = pLightSelf_.lock();
         //pChunkLocked->remove_light(pLightSelf_);
         pChunk_ = pNewChunk;
         mPosition_ += block_chunk::get_difference(pNewChunk, pChunkLocked);

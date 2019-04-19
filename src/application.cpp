@@ -268,9 +268,11 @@ void application::start()
     bool bRunning = true;
     bool bFocus = true;
 
-    utils::wptr<input::sfml_handler> pHandler = utils::wptr<input::sfml_handler>::dyn_cast(
-        pInputData_->mInput.get_handler().get_impl()
+    #ifndef USE_OIS
+    input::sfml_handler& mHandler = dynamic_cast<input::sfml_handler&>(
+        *pInputData_->mInput.get_handler().get_impl().lock().get()
     );
+    #endif
 
     while (bRunning)
     {
@@ -291,7 +293,7 @@ void application::start()
             }
 
         #ifndef USE_OIS
-            pHandler->on_sfml_event(mEvent);
+            mHandler.on_sfml_event(mEvent);
         #endif
         }
 

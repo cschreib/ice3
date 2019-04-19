@@ -18,40 +18,32 @@ movable::~movable()
 
     for (auto child : lChildList_)
     {
-        if (utils::refptr<movable> locked = child.lock())
-        {
-            locked->pParent_ = nullptr;
-            locked->on_moved_(MVT_OTHER);
-        }
+        child->pParent_ = nullptr;
+        child->on_moved_(MVT_OTHER);
     }
 }
 
-void movable::set_self(utils::wptr<movable> pSelf)
+void movable::set_parent(movable* pParent)
 {
-    pSelf_ = pSelf;
-}
-
-void movable::set_parent(utils::wptr<movable> pParent)
-{
-    if (pParent == pSelf_) {
+    if (pParent == this) {
         throw utils::exception("# Error # : movable : cannot set self as parent.");
     }
 
     if (pParent_ != pParent)
     {
         if (pParent_)
-            pParent_->lChildList_.erase(utils::find(pParent_->lChildList_, pSelf_));
+            pParent_->lChildList_.erase(utils::find(pParent_->lChildList_, this));
 
         pParent_ = pParent;
 
         if (pParent_)
-            pParent_->lChildList_.push_back(pSelf_);
+            pParent_->lChildList_.push_back(this);
 
         on_moved_(MVT_OTHER);
     }
 }
 
-utils::wptr<movable> movable::get_parent() const
+movable* movable::get_parent() const
 {
     return pParent_;
 }
@@ -135,10 +127,10 @@ const vector3f& movable::get_position() const
 
 vector3f movable::get_absolute_position() const
 {
-    if (utils::refptr<const movable> pLocked = pParent_.lock())
+    if (pParent_)
     {
-        vector3f mAbs = pLocked->get_absolute_orientation()*vector3f::scale_up(mPosition_, pLocked->get_absolute_scale());
-        mAbs += pLocked->get_absolute_position();
+        vector3f mAbs = pParent_->get_absolute_orientation()*vector3f::scale_up(mPosition_, pParent_->get_absolute_scale());
+        mAbs += pParent_->get_absolute_position();
         return mAbs;
     }
     else
@@ -153,9 +145,8 @@ const vector3f& movable::get_scale() const
 vector3f movable::get_absolute_scale() const
 {
     vector3f mAbs = mScale_;
-    utils::refptr<const movable> pLocked;
-    if (bInheritScale_ && (pLocked = pParent_.lock()))
-        mAbs = vector3f::scale_up(mAbs, pLocked->get_absolute_scale());
+    if (bInheritScale_ && pParent_)
+        mAbs = vector3f::scale_up(mAbs, pParent_->get_absolute_scale());
 
     return mAbs;
 }
@@ -168,9 +159,8 @@ const quaternion& movable::get_orientation() const
 quaternion movable::get_absolute_orientation() const
 {
     quaternion mAbs = mOrientation_;
-    utils::refptr<const movable> pLocked;
-    if (bInheritRotation_ && (pLocked = pParent_.lock()))
-        mAbs = pLocked->get_absolute_orientation()*mAbs;
+    if (bInheritRotation_ && pParent_)
+        mAbs = pParent_->get_absolute_orientation()*mAbs;
 
     return mAbs;
 }
@@ -191,18 +181,18 @@ void movable::get_absolute_transform(vector3f& mPosition, vector3f& mScale, quat
     mScale       = mScale_;
     mOrientation = mOrientation_;
 
-    if (utils::refptr<const movable> pLocked = pParent_.lock())
+    if (pParent_)
     {
-        vector3f mParentScale = pLocked->get_absolute_scale();
+        vector3f mParentScale = pParent_->get_absolute_scale();
         if (bInheritScale_)
             mScale = vector3f::scale_up(mScale, mParentScale);
 
-        quaternion mParentOrient = pLocked->get_absolute_orientation();
+        quaternion mParentOrient = pParent_->get_absolute_orientation();
         if (bInheritRotation_)
             mOrientation = mParentOrient*mOrientation;
 
         mPosition = mParentOrient*vector3f::scale_up(mPosition_, mParentScale);
-        mPosition += pLocked->get_absolute_position();
+        mPosition += pParent_->get_absolute_position();
     }
 }
 

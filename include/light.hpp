@@ -16,8 +16,6 @@ public :
     light(const std::string& sName, world& mWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
     ~light();
 
-    void set_self(utils::wptr<movable> pMovable) override;
-
     const std::string& get_name() const { return sName_; }
 
     std::weak_ptr<const block_chunk> get_chunk() const { return pChunk_; }
@@ -35,8 +33,6 @@ public :
 private :
 
     virtual void on_moved_(movable::movement_type mType);
-
-    utils::wptr<light> pLightSelf_;
 
     std::string                sName_;
     std::weak_ptr<block_chunk> pChunk_;

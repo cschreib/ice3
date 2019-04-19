@@ -106,40 +106,36 @@ public :
     void unload_chunk_(std::shared_ptr<block_chunk> pChunk);
 
     template<class T>
-    utils::wptr<T> create_unit(const utils::ustring& sName, std::weak_ptr<block_chunk> pChunk, block* pBlock)
+    T* create_unit(const utils::ustring& sName, std::weak_ptr<block_chunk> pChunk, block* pBlock)
     {
-        utils::refptr<T> pUnit;
-
         std::shared_ptr<block_chunk> pLocked = pChunk.lock();
         if (!pLocked)
-            return pUnit;
+            return nullptr;
 
-        std::set<utils::ustring>::iterator iter = lUnitLookupList_.find(sName);
-        if (iter == lUnitLookupList_.end())
+        std::map<utils::ustring,unit*>::iterator iter = lRegisteredUnitList_.find(sName);
+        if (iter == lRegisteredUnitList_.end())
         {
-            pUnit = utils::refptr<T>(new T(sName, *this, pChunk, pBlock));
-            pUnit->set_self(pUnit);
-            pLocked->add_unit(pUnit);
-            notify_unit_created(pUnit);
+            std::unique_ptr<T> pUnit(new T(sName, *this, pChunk, pBlock));
+            T* pTmp = pUnit.get();
+            pLocked->add_unit(std::move(pUnit));
+            return pTmp;
         }
         else
         {
             std::cout << "# Warning # : world : cannot create new unit with name '"
                 << utils::unicode_to_UTF8(sName) << "', already taken." << std::endl;
-        }
 
-        return pUnit;
+            return nullptr;
+        }
     }
 
-    utils::wptr<unit>       get_unit(const utils::ustring& sName);
-    utils::wptr<const unit> get_unit(const utils::ustring& sName) const;
-    utils::wptr<unit>       get_current_unit();
+    unit*       get_unit(const utils::ustring& sName);
+    const unit* get_unit(const utils::ustring& sName) const;
+    unit*       get_current_unit();
 
-    void notify_unit_loaded(utils::wptr<unit> pUnit);
-    void notify_unit_unloaded(utils::wptr<unit> pUnit);
-    void notify_unit_created(utils::wptr<unit> pUnit);
-    void notify_unit_destroyed(utils::wptr<unit> pUnit);
-    void control_unit(utils::wptr<unit> pUnit);
+    void notify_unit_loaded(unit& mUnit);
+    void notify_unit_unloaded(unit& mUnit);
+    void control_unit(unit* pUnit);
 
     void enable_vbos(bool bVBOEnabled);
     void toggle_vbos();
@@ -221,12 +217,11 @@ private :
     std::weak_ptr<block_chunk> pSelectedChunk_;
     block::face                mSelectedFace_;
 
-    utils::refptr<camera>                       pCamera_;
-    std::map<utils::ustring, utils::wptr<unit>> lRegisteredUnitList_;
-    std::set<utils::ustring>                    lUnitLookupList_;
-    utils::wptr<unit>                           pCurrentUnit_;
+    std::unique_ptr<camera>         pCamera_;
+    std::map<utils::ustring, unit*> lRegisteredUnitList_;
+    unit*                           pCurrentUnit_ = nullptr;
 
-    utils::refptr<god> pGod_;
+    god* pGod_ = nullptr;
 
     static const size_t NUM_PRIORITY_QUEUES = 10;
     static const size_t SLEEP_TIME = 20;
@@ -251,7 +246,7 @@ private :
     float fRenderDistance_ = 150.0f;
     bool bVBOEnabled_ = false, bVBOSupported_ = false, bUseVBO_ = false;
     bool bShadersEnabled_ = false, bShadersSupported_ = false, bUseShaders_ = false;
-    mutable utils::refptr<shader> pBlockShader_;
+    mutable std::shared_ptr<shader> pBlockShader_;
     bool bWireframe_ = false, bFog_ = false;
 
     bool bSmoothLighting_ = true;

@@ -127,14 +127,14 @@ public :
     // void flag_light_update();
     void update_texture(block* pBlock);
 
-    // void                AddLight(utils::refptr<Light> pLight);
-    // void                AddLightDelayed(utils::refptr<Light> pLight);
-    // void                RemoveLight(utils::wptr<Light> pLight);
+    // void                AddLight(std::shared_ptr<Light> pLight);
+    // void                AddLightDelayed(std::shared_ptr<Light> pLight);
+    // void                RemoveLight(std::weak_ptr<Light> pLight);
     // void                RemoveLight(const std::string& sName);
-    // utils::wptr<Light>       GetLight(const std::string& sName);
-    // utils::wptr<const Light> GetLight(const std::string& sName) const;
-    // void                MoveLight(utils::wptr<Light> pLight, block* pOldblock);
-    // void                UpdateLight(utils::wptr<Light> pLight);
+    // std::weak_ptr<Light>       GetLight(const std::string& sName);
+    // std::weak_ptr<const Light> GetLight(const std::string& sName) const;
+    // void                MoveLight(std::weak_ptr<Light> pLight, block* pOldblock);
+    // void                UpdateLight(std::weak_ptr<Light> pLight);
     // void                UpdateblockLight(block* pBlock);
 
     // void                PropagateLight();
@@ -144,10 +144,10 @@ public :
     // void                PropagateSunLightDirect();
     // void                UpdateSunLightIndirect();
 
-    void                    add_unit(utils::refptr<unit> pUnit);
-    void                    remove_unit(utils::wptr<unit> pUnit);
-    utils::wptr<unit>       get_unit(const utils::ustring& sName);
-    utils::wptr<const unit> get_unit(const utils::ustring& sName) const;
+    void        add_unit(std::unique_ptr<unit> pUnit);
+    void        transfer_unit_ownership(unit& mUnit, block_chunk& mDest);
+    unit*       get_unit(const utils::ustring& sName);
+    const unit* get_unit(const utils::ustring& sName) const;
 
     // void UpdateLighting() const;
     // void UpdateLighting(std::vector<block_face>& lVertexCache) const;
@@ -157,9 +157,9 @@ public :
     void build_occlusion(std::vector<block_face>& lVertexCache) const;
     void move_vertex_cache(const vector3f& mDiff) const;
     void move_vertex_cache(const vector3f& mDiff, std::vector<block_face>& lVertexCache) const;
-    void set_normal_vbo_data(utils::refptr<vbo_data> pData) const;
-    void set_two_sided_vbo_data(utils::refptr<vbo_data> pData) const;
-    void set_alpha_blended_vbo_data(utils::refptr<vbo_data> pData) const;
+    void set_normal_vbo_data(std::unique_ptr<vbo_data> pData) const;
+    void set_two_sided_vbo_data(std::unique_ptr<vbo_data> pData) const;
+    void set_alpha_blended_vbo_data(std::unique_ptr<vbo_data> pData) const;
 
     bool               is_normal_vertex_cache_empty() const;
     bool               is_two_sided_vertex_cache_empty() const;
@@ -236,7 +236,7 @@ private :
     // void SeekSunLight_(block* pBlock, uint uiRange, uint uiNumblockDown = 0);
     // void SeekLight_(block* pBlock, uint uiRange);
 
-    // utils::wptr<Light> GetBrightestLight_(block* pBlock);
+    // std::weak_ptr<Light> GetBrightestLight_(block* pBlock);
 
     void add_transparent_block_(block_chunk::anchor mAnchor);
     void remove_transparent_block_(block_chunk::anchor mAnchor);
@@ -249,7 +249,7 @@ private :
 
     void optimize_cache_(vertex_cache& lVertexCache) const;
 
-    utils::refptr<vbo_data> make_vbo_data_(const std::vector<block_face>& lVertexCache, uint uiOffset, uint uiNum) const;
+    std::unique_ptr<vbo_data> make_vbo_data_(const std::vector<block_face>& lVertexCache, uint uiOffset, uint uiNum) const;
     void updade_vbo_() const;
 
     std::weak_ptr<block_chunk> pSelf_;
@@ -268,11 +268,11 @@ private :
     bool         bVisible_ = false;
     mutable bool bBurried_ = false;
 
-    // std::map<std::string,utils::refptr<Light>> lLightList_;
+    // std::map<std::string,std::unique_ptr<Light>> lLightList_;
     // bool                                       bNoSunLight_;
     // bool                                       bFullSunLight_;
 
-    std::map<utils::ustring, utils::refptr<unit>> lUnitList_;
+    std::map<utils::ustring, std::unique_ptr<unit>> lUnitList_;
 
     mutable bool         bUpdateCache_ = true;
     // mutable bool         bUpdateLighting_ = false;
@@ -282,9 +282,9 @@ private :
     mutable bool                                bUpdateVBO_ = true;
     mutable bool                                bVBOReceived_ = true;
     mutable bool                                bVBOCleared_ = false;
-    mutable utils::refptr<vertex_buffer_object> pNormalVBO_;
-    mutable utils::refptr<vertex_buffer_object> pTwoSidedVBO_;
-    mutable utils::refptr<vertex_buffer_object> pAlphaBlendedVBO_;
+    mutable std::unique_ptr<vertex_buffer_object> pNormalVBO_;
+    mutable std::unique_ptr<vertex_buffer_object> pTwoSidedVBO_;
+    mutable std::unique_ptr<vertex_buffer_object> pAlphaBlendedVBO_;
 
     mutable bool bNew_ = false;
 };

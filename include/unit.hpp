@@ -20,8 +20,6 @@ public :
     unit(const utils::ustring& sName, world& pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
     virtual ~unit();
 
-    void set_self(utils::wptr<movable> pSelf) override;
-
     void translate(const vector3f& mTrans) override;
     void yaw(float fYaw) override;
     void pitch(float fPitch) override;
@@ -34,8 +32,8 @@ public :
     std::weak_ptr<block_chunk>       get_chunk() { return pChunk_; }
     const block*                     get_block() const { return pBlock_; }
     block*                           get_block() { return pBlock_; }
-    utils::wptr<const node>          get_camera_anchor() const { return pCameraNode_; }
-    utils::wptr<node>                get_camera_anchor() { return pCameraNode_; }
+    const node&                      get_camera_anchor() const { return mCameraNode_; }
+    node&                            get_camera_anchor() { return mCameraNode_; }
 
     const cylinder& get_cylinder() const { return mCylinder_; }
 
@@ -58,14 +56,13 @@ protected :
 
     // void update_block_();
 
-    utils::ustring    sName_;
-    utils::wptr<unit> pUnitSelf_;
-    std::string       sType_;
+    utils::ustring sName_;
+    std::string    sType_;
 
     bool bCurrent_ = false;
 
-    utils::refptr<node>   pCameraNode_;
-    float                 fTotalPitch_ = 0.0;
+    node  mCameraNode_;
+    float fTotalPitch_ = 0.0;
 
     std::weak_ptr<block_chunk> pChunk_;
     block*                     pBlock_ = nullptr;

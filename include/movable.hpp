@@ -20,13 +20,11 @@ public :
     movable(world& pWorld, const vector3f& mPosition);
     virtual ~movable() = 0;
 
-    virtual void set_self(utils::wptr<movable> pSelf);
-
     const world& get_world() const { return mWorld_; }
     world&       get_world() { return mWorld_; }
 
-    void set_parent(utils::wptr<movable> pParent);
-    utils::wptr<movable> get_parent() const;
+    void set_parent(movable* pParent);
+    movable* get_parent() const;
 
     virtual void set_position(const vector3f& mPos);
     virtual void translate(const vector3f& mTrans);
@@ -61,11 +59,10 @@ protected :
 
     virtual void on_moved_(movement_type mType);
 
-    utils::wptr<movable> pSelf_;
     world& mWorld_;
 
-    utils::wptr<movable>              pParent_;
-    std::vector<utils::wptr<movable>> lChildList_;
+    movable*              pParent_ = nullptr;
+    std::vector<movable*> lChildList_;
 
     vector3f   mPosition_ = vector3f::ZERO;
     vector3f   mScale_ = vector3f::UNIT;

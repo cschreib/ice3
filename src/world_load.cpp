@@ -117,7 +117,7 @@ void world::load(const std::string& sFile)
             sName.push_back(mUnit.sName[j]);
         }
 
-        lUnitLookupList_.insert(sName);
+        // TODO: create unit
     }
 
     set_file_(sFile);
