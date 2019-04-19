@@ -64,7 +64,7 @@ void shader::unbind()
     glActiveTexture(GL_TEXTURE0);
 }
 
-void shader::bind_texture(const std::string& sName, utils::wptr<texture> pTexture)
+void shader::bind_texture(const std::string& sName, const texture& mTexture)
 {
     int iID = get_parameter_id_(sName);
     if (iID == -1)
@@ -72,7 +72,7 @@ void shader::bind_texture(const std::string& sName, utils::wptr<texture> pTextur
 
     glActiveTexture(GL_TEXTURE0 + uiTextureBound_);
 
-    pTexture->bind();
+    mTexture.bind();
 
     glUniform1iARB(iID, uiTextureBound_);
 

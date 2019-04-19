@@ -4,6 +4,7 @@
 #include <lxgui/utils.hpp>
 #include <vector>
 #include <array>
+#include <memory>
 #include "color.hpp"
 #include "vector3.hpp"
 #include "vertex.hpp"
@@ -151,8 +152,8 @@ public :
     void add_face(const vector3f& mBlockPos, face mFace, const block* pNextBlock, uchar ucHue, std::vector<block_face>& lArray) const;
     void add_face(const vector3f& mBlockPos, face mFace, const block* pNextBlock, uchar ucHue, texture_id mTex, std::vector<block_face>& lArray) const;
 
-    static utils::refptr<texture>                                 BLOCK_TEXTURE;
-    static utils::refptr<texture>                                 BLOCK_SELECTED_TEXTURE;
+    static std::unique_ptr<texture>                               BLOCK_TEXTURE;
+    static std::unique_ptr<texture>                               BLOCK_SELECTED_TEXTURE;
     static const float                                            BLOCK_TEXTURE_SIZE;
     static std::array<color,256>                                  HUE_TABLE;
     static const std::array<std::array<block::corner,4>,6>        CORNER_LIST;

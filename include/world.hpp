@@ -256,9 +256,9 @@ private :
 
     bool bSmoothLighting_ = true;
     bool bBuildLightingArray_ = true;
-    uint uiLightingArraySize_ = 128, uiLightingArrayRatio_ = 2;
+    const uint uiLightingArraySize_ = 128, uiLightingArrayRatio_ = 2;
     uint uiLightingUpdateRate_ = 32;
-    utils::refptr<texture> lLightingArray_;
+    texture mLightingArray_;
     bool bSunLight_ = true, bLights_ = true;
 
     color mSunDayColor_   = color(0.90f, 0.96f, 1.0f);

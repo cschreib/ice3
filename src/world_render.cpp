@@ -70,8 +70,8 @@ void world::render_chunks_() const
     if (bUseShaders_)
     {
         pBlockShader_->bind();
-        pBlockShader_->bind_texture("texture", block::BLOCK_TEXTURE);
-        pBlockShader_->bind_texture("light",   lLightingArray_);
+        pBlockShader_->bind_texture("texture", *block::BLOCK_TEXTURE);
+        pBlockShader_->bind_texture("light",   mLightingArray_);
     }
     else
         block::BLOCK_TEXTURE->bind();
@@ -249,7 +249,7 @@ void world::render_faces_(const std::vector<block_face>& data, size_t offset, si
         if (mFace.b == pSelectedBlock_)
             mColor = mColor*color::RED;
 
-        const texture::color& mLight = lLightingArray_->get_pixel(
+        const texture::color& mLight = mLightingArray_.get_pixel(
             mFace.sunlight/uiLightingArrayRatio_, mFace.light/uiLightingArrayRatio_
         );
 
@@ -295,7 +295,7 @@ void world::render_faces_smooth_(const std::vector<block_face>& data, size_t off
         if (mFace.b == pSelectedBlock_)
             mColor = mColor*color::RED;
 
-        float fOcclusion = lLightingArray_->get_pixel(
+        float fOcclusion = mLightingArray_.get_pixel(
             mFace.sunlight/uiLightingArrayRatio_, mFace.light/uiLightingArrayRatio_
         ).a/255.0f;
 
@@ -339,7 +339,7 @@ void world::render_vertex_shader_(const vertex& v, const block_face& mFace) cons
 
 void world::render_vertex_smooth_(const vertex& v, const color& mColor, const float& fOcclusion) const
 {
-    const texture::color& mLight = lLightingArray_->get_pixel(
+    const texture::color& mLight = mLightingArray_.get_pixel(
         v.sunlight/uiLightingArrayRatio_, v.light/uiLightingArrayRatio_
     );
 

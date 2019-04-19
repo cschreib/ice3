@@ -18,7 +18,7 @@ public :
     void bind();
     void unbind();
 
-    void bind_texture(const std::string&, utils::wptr<texture> pTexture);
+    void bind_texture(const std::string&, const texture& mTexture);
 
     static bool is_supported();
 

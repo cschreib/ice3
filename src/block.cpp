@@ -16,8 +16,8 @@ std::array<color,256> block::make_hue_table_()
 
 std::array<color,256> block::HUE_TABLE = make_hue_table_();
 
-utils::refptr<texture> block::BLOCK_TEXTURE;
-utils::refptr<texture> block::BLOCK_SELECTED_TEXTURE;
+std::unique_ptr<texture> block::BLOCK_TEXTURE;
+std::unique_ptr<texture> block::BLOCK_SELECTED_TEXTURE;
 
 const std::array<std::array<block::corner,4>,6> block::CORNER_LIST = {{
     {{block::FRONT_BOTTOM_LEFT,  block::FRONT_TOP_LEFT,     block::BACK_TOP_LEFT,      block::BACK_BOTTOM_LEFT}},  // LEFT

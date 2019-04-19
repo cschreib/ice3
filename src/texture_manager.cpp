@@ -10,19 +10,20 @@ texture_manager::texture_manager()
 {
 }
 
-utils::wptr<texture> texture_manager::get_texture(const std::string& sFile)
+texture* texture_manager::get_texture(const std::string& sFile)
 {
-    std::map<std::string, utils::refptr<texture>>::iterator iter = lTextureList_.find(sFile);
+    std::map<std::string, std::unique_ptr<texture>>::iterator iter = lTextureList_.find(sFile);
     if (iter != lTextureList_.end())
-        return iter->second;
+        return iter->second.get();
 
-    utils::refptr<texture> pTex = load_texture(sFile);
+    std::unique_ptr<texture> pTex = load_texture(sFile);
     if (!pTex)
         return nullptr;
 
-    lTextureList_.insert(std::make_pair(sFile, pTex));
+    texture* pTexTemp = pTex.get();
+    lTextureList_.insert(std::make_pair(sFile, std::move(pTex)));
 
-    return pTex;
+    return pTexTemp;
 }
 
 void raise_error(png_struct* png, char const* message)
@@ -36,7 +37,7 @@ void read_data(png_structp pReadStruct, png_bytep pData, png_size_t uiLength)
     ((std::ifstream*)p)->read((char*)pData, uiLength);
 }
 
-utils::refptr<texture> texture_manager::load_texture(const std::string& sFile)
+std::unique_ptr<texture> texture_manager::load_texture(const std::string& sFile)
 {
     // Loading a PNG file, code inspired from :
     // http://www.piko3d.com/tutorials/libpng-tutorial-loading-png-files-from-streams
@@ -102,7 +103,7 @@ utils::refptr<texture> texture_manager::load_texture(const std::string& sFile)
         png_uint_32 uiHeight = png_get_image_height(pReadStruct, pInfoStruct);
 
         std::unique_ptr<png_bytep[]> pRows(new png_bytep[uiHeight]);
-        utils::refptr<texture>   pTex(new texture(uiWidth, uiHeight));
+        std::unique_ptr<texture>     pTex(new texture(uiWidth, uiHeight));
 
         png_bytep*      pTempRows = pRows.get();
         texture::color* pTempData = pTex->get_data().data();

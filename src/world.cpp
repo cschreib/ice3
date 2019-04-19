@@ -22,7 +22,8 @@
 void register_glues(lua::state& mState);
 
 world::world(application& mApp, bool bPlay, bool bShow) :
-    state(mApp, bPlay, bShow), mApp_(mApp), mGUIManager_(
+    state(mApp, bPlay, bShow), mApp_(mApp),
+    mGUIManager_(
         mApp_.get_input_data().mInput.get_handler(),
         mApp_.get_locale(),
         mApp_.get_window().getSize().x,
@@ -31,7 +32,10 @@ world::world(application& mApp, bool bPlay, bool bShow) :
     ),
     pUpdaterThread_(new updater_thread_t),
     pLoadWorker_(new load_worker_t(*this)), pSaveWorker_(new save_worker_t(*this)),
-    pLoaderThread_(new loader_thread_t(*pLoadWorker_, *pSaveWorker_))
+    pLoaderThread_(new loader_thread_t(*pLoadWorker_, *pSaveWorker_)),
+    mLightingArray_(
+        uiLightingArraySize_, uiLightingArraySize_, texture::CLAMP, texture::NONE
+    )
 {
     bVBOSupported_ = vertex_buffer_object::is_supported();
     std::cout << "Note : vertex buffer objects are " <<
@@ -68,9 +72,6 @@ world::world(application& mApp, bool bPlay, bool bShow) :
     mRenderData_.fRenderTime = 0.0f;
     mRenderData_.fUpdateTime = 0.0f;
 
-    lLightingArray_ = utils::refptr<texture>(new texture(
-        uiLightingArraySize_, uiLightingArraySize_, texture::CLAMP, texture::NONE
-    ));
     initialize_block_data(mTextureManager_);
 
     std::cout << stamp << " Reading configuration..." << std::endl;
@@ -432,7 +433,7 @@ void world::update_lighting_(float fDelta)
                     mLight.saturate();
                     mLight.a = block::OCCLUSION_TABLE2[std::max(s, l)*uiLightingArrayRatio_];
 
-                    lLightingArray_->set_pixel(s, l, texture::color(mLight));
+                    mLightingArray_.set_pixel(s, l, texture::color(mLight));
                 }
             }
         }
@@ -446,7 +447,7 @@ void world::update_lighting_(float fDelta)
                 mLight.a = block::OCCLUSION_TABLE2[l*uiLightingArrayRatio_];
 
                 for (uint s = 0; s < uiLightingArraySize_; ++s)
-                    lLightingArray_->set_pixel(s, l, texture::color(mLight));
+                    mLightingArray_.set_pixel(s, l, texture::color(mLight));
             }
         }
         else if (bSunLight_ && !bLights_)
@@ -459,18 +460,18 @@ void world::update_lighting_(float fDelta)
                 mLight.a = block::OCCLUSION_TABLE2[s*uiLightingArrayRatio_];
 
                 for (uint l = 0; l < uiLightingArraySize_; ++l)
-                    lLightingArray_->set_pixel(s, l, texture::color(mLight));
+                    mLightingArray_.set_pixel(s, l, texture::color(mLight));
             }
         }
         else
         {
             for (uint s = 0; s < uiLightingArraySize_; ++s)
             for (uint l = 0; l < uiLightingArraySize_; ++l)
-                lLightingArray_->set_pixel(s, l, texture::color(255, 255, 255));
+                mLightingArray_.set_pixel(s, l, texture::color(255, 255, 255));
         }
 
-        lLightingArray_->update_texture();
-        //lLightingArray_->save_to_file("light.png");
+        mLightingArray_.update_texture();
+        //mLightingArray_.save_to_file("light.png");
 
         bBuildLightingArray_ = false;
     }
