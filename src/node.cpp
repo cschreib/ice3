@@ -1,11 +1,11 @@
 #include "node.hpp"
 
-node::node(utils::wptr<world> pWorld) :
-    movable(pWorld)
+node::node(world& mWorld) :
+    movable(mWorld)
 {
 }
 
-node::node(utils::wptr<world> pWorld, const vector3f& mPosition) :
-    movable(pWorld, mPosition)
+node::node(world& mWorld, const vector3f& mPosition) :
+    movable(mWorld, mPosition)
 {
 }

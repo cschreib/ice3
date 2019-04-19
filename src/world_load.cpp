@@ -181,14 +181,14 @@ const double load_chunk_task::dFrequency[NUM_SETS] = {0.01, 0.05};
 const uint   load_chunk_task::uiOctaves[NUM_SETS] = {5, 4};
 const int    load_chunk_task::iSeed[NUM_SETS] = {2, 654};
 
-load_chunk_task::load_chunk_task(utils::wptr<world> pWorld) : w(pWorld)
+load_chunk_task::load_chunk_task(world& mWorld) : w(mWorld)
 {
     for (size_t i = 0; i < NUM_SETS; ++i)
     {
         noise[i].dPersistence = dPersistence[i];
         noise[i].dFrequency = dFrequency[i];
         noise[i].uiOctaves = uiOctaves[i];
-        noise[i].iSeed = w->get_seed() + iSeed[i];
+        noise[i].iSeed = w.get_seed() + iSeed[i];
     }
 }
 
@@ -328,7 +328,7 @@ void world::save_chunk_(std::shared_ptr<block_chunk> chunk)
     // TODO
 }
 
-save_chunk_task::save_chunk_task(utils::wptr<world> pWorld) : w(pWorld)
+save_chunk_task::save_chunk_task(world& mWorld) : w(mWorld)
 {
     // TODO
 }

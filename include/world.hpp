@@ -35,10 +35,9 @@ struct load_chunk_task
     static const int    iSeed[NUM_SETS];
     perlin_noise        noise[NUM_SETS];
 
-    utils::wptr<world> w;
+    world& w;
 
-    load_chunk_task() {}
-    load_chunk_task(utils::wptr<world> pWorld);
+    load_chunk_task(world& mWorld);
 
     std::shared_ptr<block_chunk> operator () (const chunk_id& id) const;
     std::shared_ptr<block_chunk> generate_chunk(const chunk_id& chunk_pos) const;
@@ -49,10 +48,9 @@ private :
 
 struct save_chunk_task
 {
-    utils::wptr<world> w;
+    world& w;
 
-    save_chunk_task() {}
-    save_chunk_task(utils::wptr<world> pWorld);
+    save_chunk_task(world& mWorld);
 
     void operator () (std::shared_ptr<block_chunk> chunk) const;
 
@@ -69,7 +67,6 @@ public :
     world(const world&) = delete;
     world& operator = (const world&) = delete;
 
-    void set_self(utils::wptr<state> pSelf) override;
     void update(input_data& mData) override;
     void render() override;
 
@@ -120,7 +117,7 @@ public :
         std::set<utils::ustring>::iterator iter = lUnitLookupList_.find(sName);
         if (iter == lUnitLookupList_.end())
         {
-            pUnit = utils::refptr<T>(new T(sName, utils::wptr<world>::cast(pSelf_), pChunk, pBlock));
+            pUnit = utils::refptr<T>(new T(sName, *this, pChunk, pBlock));
             pUnit->set_self(pUnit);
             pLocked->add_unit(pUnit);
             notify_unit_created(pUnit);

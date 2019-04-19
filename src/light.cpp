@@ -25,8 +25,8 @@ static std::array<uint,256> make_range_table()
 const std::array<uint,256>  light::RANGE_TABLE     = make_range_table();
 const std::array<float,256> light::INTENSITY_TABLE = make_intensity_table();
 
-light::light(const std::string& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
-    movable(pWorld, vector3f(pChunk.lock()->get_block_position(pBlock))),
+light::light(const std::string& sName, world& mWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
+    movable(mWorld, vector3f(pChunk.lock()->get_block_position(pBlock))),
     sName_(sName), pChunk_(pChunk), pBlock_(pBlock)
 {
 }
@@ -63,7 +63,7 @@ void light::on_moved_(movable::movement_type mType)
     vector3i mCPos = block_chunk::to_chunk_pos(mPos);
     vector3i mBPos = block_chunk::to_block_pos(mPos);
 
-    std::shared_ptr<block_chunk> pCurrentLocked = pWorld_->get_current_chunk().lock();
+    std::shared_ptr<block_chunk> pCurrentLocked = mWorld_.get_current_chunk().lock();
     if (pCurrentLocked)
         mCPos += pCurrentLocked->get_coordinates();
 
@@ -73,7 +73,7 @@ void light::on_moved_(movable::movement_type mType)
 
     if (mCPos != pChunkLocked->get_coordinates())
     {
-        std::shared_ptr<block_chunk> pNewChunk = pWorld_->get_chunk(mCPos).lock();
+        std::shared_ptr<block_chunk> pNewChunk = mWorld_.get_chunk(mCPos).lock();
 
         if (!pNewChunk)
             return;

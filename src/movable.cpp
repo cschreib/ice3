@@ -2,12 +2,12 @@
 #include <lxgui/utils_string.hpp>
 #include <lxgui/utils_exception.hpp>
 
-movable::movable(utils::wptr<world> pWorld) : pWorld_(pWorld)
+movable::movable(world& mWorld) : mWorld_(mWorld)
 {
 }
 
-movable::movable(utils::wptr<world> pWorld, const vector3f& mPosition) :
-    pWorld_(pWorld), mPosition_(mPosition)
+movable::movable(world& mWorld, const vector3f& mPosition) :
+    mWorld_(mWorld), mPosition_(mPosition)
 {
 }
 

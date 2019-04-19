@@ -13,7 +13,7 @@ class light : public movable
 {
 public :
 
-    light(const std::string& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
+    light(const std::string& sName, world& mWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
     ~light();
 
     void set_self(utils::wptr<movable> pMovable) override;

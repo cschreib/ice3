@@ -28,8 +28,8 @@ const std::array<block_chunk::anchor,6> block_chunk::OPPOSED_LIST = {{
     block_chunk::FRONT, block_chunk::BOTTOM, block_chunk::TOP
 }};
 
-block_chunk::block_chunk(utils::wptr<world> pWorld, const vector3i& mPos) :
-    pWorld_(pWorld), mCoordinates_(mPos)
+block_chunk::block_chunk(world& mWorld, const vector3i& mPos) :
+    mWorld_(mWorld), mCoordinates_(mPos)
 {
     for (auto& data : lFaceTranspBlockCount_)
         data = CHUNK_SIZE*CHUNK_SIZE;
@@ -50,14 +50,14 @@ void block_chunk::set_self(std::weak_ptr<block_chunk> pSelf)
     pSelf_ = pSelf;
 }
 
-utils::wptr<const world> block_chunk::get_world() const
+const world& block_chunk::get_world() const
 {
-    return pWorld_;
+    return mWorld_;
 }
 
-utils::wptr<world> block_chunk::get_world()
+world& block_chunk::get_world()
 {
-    return pWorld_;
+    return mWorld_;
 }
 
 void block_chunk::flag_clear_links() const
@@ -111,7 +111,7 @@ vector3i block_chunk::get_block_position(const block* pBlock) const
 
 vector3f block_chunk::get_block_world_position(const block* pBlock) const
 {
-    return vector3f(get_block_position(pBlock)) + get_position(pWorld_->get_current_chunk());
+    return vector3f(get_block_position(pBlock)) + get_position(mWorld_.get_current_chunk());
 }
 
 bool block_chunk::is_empty() const
@@ -575,7 +575,7 @@ void block_chunk::set_block(block* pBlock, block::type mType)
                 --uiPlainBlockCount_;
 
             if (uiPlainBlockCount_ == 0u || uiOldblockCount == 0u)
-                pWorld_->flag_update_visible_chunk_list();
+                mWorld_.flag_update_visible_chunk_list();
 
             if (block::is_walkable(mType) != block::is_walkable(mOldType))
                 flag_update_collision_faces_(pBlock);
@@ -871,7 +871,7 @@ bool block_chunk::is_alpha_blended_vertex_cache_empty() const
 std::vector<block_face> block_chunk::get_cached_faces(const block* pBlock) const
 {
     if (bUpdateCache_)
-        pWorld_->update_chunk_immediate(pSelf_);
+        mWorld_.update_chunk_immediate(pSelf_);
 
     std::vector<block_face> lArray;
     for (block_face& face : mVertexCache_.lData)
@@ -898,13 +898,13 @@ std::vector<block_face> block_chunk::get_old_cached_faces(const block* pBlock) c
 void block_chunk::get_cached_world_faces(const block* pBlock, std::vector<block_face>& lArray) const
 {
     if (bUpdateCache_)
-        pWorld_->update_chunk_immediate(pSelf_);
+        mWorld_.update_chunk_immediate(pSelf_);
 
-    std::shared_ptr<const block_chunk> pCurrentChunk = pWorld_->get_current_chunk().lock();
+    std::shared_ptr<const block_chunk> pCurrentChunk = mWorld_.get_current_chunk().lock();
 
     bool bCurrent = (pSelf_.lock() == pCurrentChunk);
     vector3f mPosition;
-    if (!bCurrent && pWorld_->are_vbos_enabled())
+    if (!bCurrent && mWorld_.are_vbos_enabled())
         mPosition = get_position(pCurrentChunk);
 
     for (block_face& face : mVertexCache_.lData)
@@ -912,7 +912,7 @@ void block_chunk::get_cached_world_faces(const block* pBlock, std::vector<block_
         if (face.b == pBlock)
         {
             block_face mFace = face;
-            if (!bCurrent && pWorld_->are_vbos_enabled())
+            if (!bCurrent && mWorld_.are_vbos_enabled())
             {
                 vertex* v = &mFace.v1;
                 for (uint i = 0; i < 4; ++i)
@@ -1141,7 +1141,7 @@ bool block_chunk::cast_ray(const ray& mRay, block_collision_data& mData)
 
 axis_aligned_box block_chunk::get_bounding_box() const
 {
-    return BOUNDING_BOX + get_position(pWorld_->get_current_chunk());
+    return BOUNDING_BOX + get_position(mWorld_.get_current_chunk());
 }
 
 void block_chunk::flag_update_collision_faces_(const block* pBlock)
@@ -1164,13 +1164,13 @@ void block_chunk::flag_update_collision_faces_(const block* pBlock)
     vector3f mSize = vector3f(hsize, vsize, hsize);
 
     vector3f mPos = mCylinder.pos;
-    mPos -= get_position(pWorld_->get_current_chunk());
+    mPos -= get_position(mWorld_.get_current_chunk());
 
     int x0 = float::Round(mPos.X());
     int y0 = float::Round(mPos.Y());
     int z0 = float::Round(mPos.Z());
 
-    mPos = vector3f(x0, y0, z0) + get_position(pWorld_->get_current_chunk());
+    mPos = vector3f(x0, y0, z0) + get_position(mWorld_.get_current_chunk());
 
     axis_aligned_box mABox(mPos - mSize, mPos + mSize);
 
@@ -1209,7 +1209,7 @@ void block_chunk::flag_update_collision_faces_(const block* pBlock)
                 if (mNextblock.second && !mNextblock.second->open)
                 {
                     vector3f mBlockPos = mNextblock.first->get_block_position(mNextblock.second) +
-                        mNextblock.first->get_position(pWorld_->get_current_chunk());
+                        mNextblock.first->get_position(mWorld_.get_current_chunk());
 
                     if (mABox.Contains(mBlockPos))
                     {
@@ -1284,7 +1284,7 @@ void block_chunk::update_burried_state_() const
     if (bOld != bBurried_)
     {
         bUpdateCache_ = true;
-        pWorld_->flag_update_visible_chunk_list();
+        mWorld_.flag_update_visible_chunk_list();
     }
 }
 
@@ -1300,9 +1300,9 @@ utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face
 
     uint uiNumVertex = 0u;
 
-    if (pWorld_->are_shaders_enabled())
+    if (mWorld_.are_shaders_enabled())
     {
-        if (!pWorld_->is_smooth_lighting_enabled())
+        if (!mWorld_.is_smooth_lighting_enabled())
         {
             pData = utils::refptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_3::TYPE));
             vbo_vertex_3* lArray = reinterpret_cast<vbo_vertex_3*>(pData->pData);
@@ -1363,14 +1363,14 @@ utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face
         pData = utils::refptr<vbo_data>(new vbo_data(4u*uiNumFace, vbo_vertex_1::TYPE));
         vbo_vertex_1* lArray = reinterpret_cast<vbo_vertex_1*>(pData->pData);
 
-        if (!pWorld_->is_smooth_lighting_enabled())
+        if (!mWorld_.is_smooth_lighting_enabled())
         {
             for (uint i = 0; i < uiNumFace; ++i)
             {
                 const block_face& mFace = lVertexCache[i+uiOffset];
 
                 color mColor = block::HUE_TABLE[mFace.hue];
-                pWorld_->lighten_color(mColor, mFace.sunlight, mFace.light);
+                mWorld_.lighten_color(mColor, mFace.sunlight, mFace.light);
 
                 const vertex* v = &mFace.v1;
                 for (uint j = 0; j < 4; ++j)
@@ -1393,7 +1393,7 @@ utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face
                 const block_face& mFace = lVertexCache[i+uiOffset];
 
                 color mColor = block::HUE_TABLE[mFace.hue];
-                float fOcclusion = pWorld_->get_occlusion(mFace.sunlight, mFace.light);
+                float fOcclusion = mWorld_.get_occlusion(mFace.sunlight, mFace.light);
 
                 const vertex* v = &mFace.v1;
                 for (uint j = 0; j < 4; ++j)
@@ -1402,7 +1402,7 @@ utils::refptr<vbo_data> block_chunk::make_vbo_data_(const std::vector<block_face
                     lArray[uiNumVertex+j].v = v[j].uv.v;
 
                     color mTempColor = mColor;
-                    pWorld_->lighten_color(mTempColor, v[j].sunlight, v[j].light);
+                    mWorld_.lighten_color(mTempColor, v[j].sunlight, v[j].light);
 
                     if (v[j].occlusion == 0u)
                     {

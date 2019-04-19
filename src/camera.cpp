@@ -12,11 +12,11 @@
 #undef FAR
 #endif
 
-camera::camera(utils::wptr<world> pWorld) : movable(pWorld)
+camera::camera(world& mWorld) : movable(mWorld)
 {
 }
 
-camera::camera(utils::wptr<world> pWorld, const vector3f& mPosition) : movable(pWorld, mPosition)
+camera::camera(world& mWorld, const vector3f& mPosition) : movable(mWorld, mPosition)
 {
 }
 

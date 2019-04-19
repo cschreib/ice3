@@ -23,8 +23,8 @@ void register_glues(lua::state& mState);
 
 world::world(application& mApp, bool bPlay, bool bShow) :
     state(mApp, bPlay, bShow), mApp_(mApp),
-    pUpdaterThread_(new updater_thread_t()),
-    pLoadWorker_(new load_worker_t()), pSaveWorker_(new save_worker_t),
+    pUpdaterThread_(new updater_thread_t),
+    pLoadWorker_(new load_worker_t(*this)), pSaveWorker_(new save_worker_t(*this)),
     pLoaderThread_(new loader_thread_t(*pLoadWorker_, *pSaveWorker_))
 {
     bVBOSupported_ = vertex_buffer_object::is_supported();
@@ -87,6 +87,30 @@ world::world(application& mApp, bool bPlay, bool bShow) :
         reload_shaders_();
         std::cout << stamp << " Done." << std::endl;
     }
+
+    pCamera_ = utils::refptr<camera>(new camera(*this));
+    pCamera_->set_self(pCamera_);
+    pCamera_->set_on_moved_listener(std::bind(&world::on_camera_moved_, this, std::placeholders::_1));
+
+    std::cout << stamp << " Creating threads..." << std::endl;
+    //pUpdaterThread_->start_new();
+    pLoadWorker_->start_new(*this);
+    pSaveWorker_->start_new(*this);
+    pLoaderThread_->start();
+    std::cout << stamp << " Done." << std::endl;
+
+    vector3f mStartPos(0.0f, 0.0f, 0.0f);
+    pLoadWorker_->get_worker().get_terrain_height(mStartPos);
+    mStartPos.y = std::max(0.0f, mStartPos.y) + 1.0f + 1.0f;
+
+    generate_chunks_around(block_chunk::to_chunk_pos(mStartPos));
+
+    pGod_ = create_unit<god>(
+        U"TheAlmighty", pCurrentChunk_, pCurrentChunk_->get_block(
+            block_chunk::to_block_pos(mStartPos)
+        )
+    ).lock();
+    control_unit(pGod_);
 }
 
 world::~world()
@@ -180,43 +204,10 @@ void world::renew()
 {
     clear();
 
-    utils::wptr<world> pSelfWorld = utils::wptr<world>::dyn_cast(pSelf_);
-
     pUpdaterThread_->start_new();
-    pLoadWorker_->start_new(pSelfWorld);
-    pSaveWorker_->start_new(pSelfWorld);
+    pLoadWorker_->start_new(*this);
+    pSaveWorker_->start_new(*this);
     pLoaderThread_->start();
-}
-
-void world::set_self(utils::wptr<state> pSelf)
-{
-    state::set_self(pSelf);
-
-    utils::wptr<world> pSelfWorld = utils::wptr<world>::dyn_cast(pSelf_);
-
-    pCamera_ = utils::refptr<camera>(new camera(pSelfWorld));
-    pCamera_->set_self(pCamera_);
-    pCamera_->set_on_moved_listener(std::bind(&world::on_camera_moved_, this, std::placeholders::_1));
-
-    std::cout << stamp << " Creating threads..." << std::endl;
-    //pUpdaterThread_->start_new();
-    pLoadWorker_->start_new(pSelfWorld);
-    pSaveWorker_->start_new(pSelfWorld);
-    pLoaderThread_->start();
-    std::cout << stamp << " Done." << std::endl;
-
-    vector3f mStartPos(0.0f, 0.0f, 0.0f);
-    pLoadWorker_->task.get_terrain_height(mStartPos);
-    mStartPos.y = std::max(0.0f, mStartPos.y) + 1.0f + 1.0f;
-
-    generate_chunks_around(block_chunk::to_chunk_pos(mStartPos));
-
-    pGod_ = create_unit<god>(
-        U"TheAlmighty", pCurrentChunk_, pCurrentChunk_->get_block(
-            block_chunk::to_block_pos(mStartPos)
-        )
-    ).lock();
-    control_unit(pGod_);
 }
 
 world::render_data world::get_render_data() const
@@ -773,7 +764,7 @@ void world::add_chunk(std::shared_ptr<block_chunk> pChunk)
 void world::generate_chunks_around(const vector3i& pos)
 {
     std::cout << stamp << "Generating chunks around " << pos << std::endl;
-    std::shared_ptr<block_chunk> chunk = pLoadWorker_->task(pos);
+    std::shared_ptr<block_chunk> chunk = pLoadWorker_->get_worker()(pos);
     add_chunk(chunk);
     set_current_chunk(chunk);
     update_chunk_immediate(chunk);

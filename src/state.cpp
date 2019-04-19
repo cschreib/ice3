@@ -9,11 +9,6 @@ state::~state()
 {
 }
 
-void state::set_self(utils::wptr<state> pSelf)
-{
-    pSelf_ = pSelf;
-}
-
 void state::pause()
 {
     bPaused_ = true;

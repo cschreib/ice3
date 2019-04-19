@@ -30,8 +30,6 @@ public :
     state(const state& mState) = delete;
     state& operator = (const state& mState) = delete;
 
-    virtual void set_self(utils::wptr<state> pSelf);
-
     virtual void pause();
     virtual void play();
     bool         is_paused() const;
@@ -46,8 +44,6 @@ public :
     bool         is_asking_for_shutdown() const;
 
 protected :
-
-    utils::wptr<state> pSelf_;
 
     bool bPaused_ = false;
     bool bHidden_ = false;

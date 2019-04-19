@@ -47,12 +47,12 @@ public :
         BOTTOM
     };
 
-    block_chunk(utils::wptr<world> pWorld, const vector3i& mPos);
+    block_chunk(world& pWorld, const vector3i& mPos);
     ~block_chunk();
 
     void set_self(std::weak_ptr<block_chunk> pSelf);
-    utils::wptr<const world> get_world() const;
-    utils::wptr<world> get_world();
+    const world& get_world() const;
+    world& get_world();
 
     void flag_clear_links() const;
     void clear_links() const;
@@ -253,7 +253,7 @@ private :
     void updade_vbo_() const;
 
     std::weak_ptr<block_chunk> pSelf_;
-    utils::wptr<world>         pWorld_;
+    world&                     mWorld_;
 
     vector3i mCoordinates_;
 

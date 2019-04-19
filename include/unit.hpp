@@ -17,7 +17,7 @@ class unit : public movable
 {
 public :
 
-    unit(const utils::ustring& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
+    unit(const utils::ustring& sName, world& pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
     virtual ~unit();
 
     void set_self(utils::wptr<movable> pSelf) override;
@@ -78,7 +78,7 @@ class god : public unit
 {
 public :
 
-    god(const utils::ustring& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
+    god(const utils::ustring& sName, world& mWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock);
 
     void translate(const vector3f& mTrans) override;
     void yaw(float fYaw) override;

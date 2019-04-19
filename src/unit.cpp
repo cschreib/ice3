@@ -5,11 +5,11 @@
 #include <lxgui/gui_eventmanager.hpp>
 #include <lxgui/utils_string.hpp>
 
-unit::unit(const utils::ustring& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
-    movable(pWorld, vector3f(pChunk.lock()->get_block_position(pBlock))),
+unit::unit(const utils::ustring& sName, world& mWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
+    movable(mWorld, vector3f(pChunk.lock()->get_block_position(pBlock))),
     sName_(sName), pChunk_(pChunk), pBlock_(pBlock)
 {
-    pCameraNode_ = utils::refptr<node>(new node(pWorld_));
+    pCameraNode_ = utils::refptr<node>(new node(mWorld_));
     pCameraNode_->set_self(pCameraNode_);
 
     sType_ = "UNIT";
@@ -17,7 +17,7 @@ unit::unit(const utils::ustring& sName, utils::wptr<world> pWorld, std::weak_ptr
 
 unit::~unit()
 {
-    pWorld_->notify_unit_unloaded(pUnitSelf_);
+    mWorld_.notify_unit_unloaded(pUnitSelf_);
 }
 
 void unit::set_self(utils::wptr<movable> pSelf)
@@ -25,7 +25,7 @@ void unit::set_self(utils::wptr<movable> pSelf)
     movable::set_self(pSelf);
     pCameraNode_->set_parent(pSelf);
     pUnitSelf_ = utils::wptr<unit>::dyn_cast(pSelf);
-    pWorld_->notify_unit_loaded(pUnitSelf_);
+    mWorld_.notify_unit_loaded(pUnitSelf_);
 }
 
 void unit::notify_current(bool bCurrent)
@@ -111,7 +111,7 @@ void unit::on_moved_(movable::movement_type mType)
     vector3i mCPos = block_chunk::to_chunk_pos(mPos);
     vector3i mBPos = block_chunk::to_block_pos(mPos);
 
-    std::shared_ptr<block_chunk> pCurrentLocked = pWorld_->get_current_chunk().lock();
+    std::shared_ptr<block_chunk> pCurrentLocked = mWorld_.get_current_chunk().lock();
     if (pCurrentLocked)
         mCPos += pCurrentLocked->get_coordinates();
 
@@ -121,7 +121,7 @@ void unit::on_moved_(movable::movement_type mType)
 
     if (mCPos != pChunkLocked->get_coordinates())
     {
-        std::shared_ptr<block_chunk> pNewChunk = pWorld_->get_chunk(mCPos).lock();
+        std::shared_ptr<block_chunk> pNewChunk = mWorld_.get_chunk(mCPos).lock();
 
         if (!pNewChunk)
             return;
@@ -136,7 +136,7 @@ void unit::on_moved_(movable::movement_type mType)
         pChunkLocked->add_unit(pSelfLocked);
 
         if (bCurrent_)
-            pWorld_->set_current_chunk(pChunk_);
+            mWorld_.set_current_chunk(pChunk_);
     }
     else if (mBPos != pChunkLocked->get_block_position(pBlock_))
         pBlock_ = pChunkLocked->get_block(mBPos);
@@ -144,8 +144,8 @@ void unit::on_moved_(movable::movement_type mType)
     movable::on_moved_(mType);
 }
 
-god::god(const utils::ustring& sName, utils::wptr<world> pWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
-    unit(sName, pWorld, pChunk, pBlock)
+god::god(const utils::ustring& sName, world& mWorld, std::weak_ptr<block_chunk> pChunk, block* pBlock) :
+    unit(sName, mWorld, pChunk, pBlock)
 {
     sType_ = "GOD";
 }
@@ -198,7 +198,7 @@ void god::update(input_data& mData)
 
     if (bCurrent_)
     {
-        /*pWorld_->SelectblockOnScreen(pCamera_->GetMouseRay(0.5f, 0.5f));
+        /*mWorld_.SelectblockOnScreen(pCamera_->GetMouseRay(0.5f, 0.5f));
 
         if (InputManager::GetSingleton()->MouseIsDown(MOUSE_LEFT))
             FirstAction(fDelta);
@@ -207,27 +207,27 @@ void god::update(input_data& mData)
 
         if (InputManager::GetSingleton()->KeyIsPressed(KEY_L))
         {
-            if (pWorld_->GetSelectedblock_chunk())
+            if (mWorld_.GetSelectedblock_chunk())
             {
                 std::pair<std::weak_ptr<block_chunk>,block*> mNext =
-                    pWorld_->GetSelectedblock_chunk()->get_block(
-                        pWorld_->GetSelectedblockFace(), pWorld_->GetSelectedblock()
+                    mWorld_.GetSelectedblock_chunk()->get_block(
+                        mWorld_.GetSelectedblockFace(), mWorld_.GetSelectedblock()
                     );
 
                 if (mNext.second)
                 {
                     if (InputManager::GetSingleton()->ShiftPressed())
-                        pWorld_->DeleteLight(mNext.first, mNext.second);
+                        mWorld_.DeleteLight(mNext.first, mNext.second);
                     else
-                        pWorld_->CreateLight(mNext.first, mNext.second);
+                        mWorld_.CreateLight(mNext.first, mNext.second);
                 }
             }
         }
 
         if (InputManager::GetSingleton()->KeyIsPressed(KEY_C))
         {
-            vector3f mPosition = pNode_->get_position() + pChunk_->get_position(pWorld_->get_current_chunk());
-            std::weak_ptr<block_chunk> pChunk = pWorld_->get_chunk(mPosition);
+            vector3f mPosition = pNode_->get_position() + pChunk_->get_position(mWorld_.get_current_chunk());
+            std::weak_ptr<block_chunk> pChunk = mWorld_.get_chunk(mPosition);
             if (pChunk)
             {
                 if (pChunk != pChunk_)
@@ -241,7 +241,7 @@ void god::update(input_data& mData)
 
                     pChunk_->Addunit(pSelfLocked);
 
-                    pWorld_->SetCurrentChunk(pChunk_);
+                    mWorld_.SetCurrentChunk(pChunk_);
                 }
             }
         }*/

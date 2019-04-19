@@ -16,14 +16,14 @@ class movable : public gui::event_receiver
 {
 public :
 
-    movable(utils::wptr<world> pWorld);
-    movable(utils::wptr<world> pWorld, const vector3f& mPosition);
+    movable(world& pWorld);
+    movable(world& pWorld, const vector3f& mPosition);
     virtual ~movable() = 0;
 
     virtual void set_self(utils::wptr<movable> pSelf);
 
-    utils::wptr<const world> get_world() const { return pWorld_; }
-    utils::wptr<world>       get_world() { return pWorld_; }
+    const world& get_world() const { return mWorld_; }
+    world&       get_world() { return mWorld_; }
 
     void set_parent(utils::wptr<movable> pParent);
     utils::wptr<movable> get_parent() const;
@@ -62,7 +62,7 @@ protected :
     virtual void on_moved_(movement_type mType);
 
     utils::wptr<movable> pSelf_;
-    utils::wptr<world>   pWorld_;
+    world& mWorld_;
 
     utils::wptr<movable>              pParent_;
     std::vector<utils::wptr<movable>> lChildList_;

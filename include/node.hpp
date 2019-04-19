@@ -8,8 +8,8 @@ class node : public movable
 {
 public :
 
-    node(utils::wptr<world> pWorld);
-    node(utils::wptr<world> pWorld, const vector3f& mPosition);
+    node(world& mWorld);
+    node(world& mWorld, const vector3f& mPosition);
     ~node() = default;
 
 private :

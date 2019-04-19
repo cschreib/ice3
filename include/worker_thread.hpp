@@ -34,14 +34,15 @@ class worker_thread_t<T, N, policies::task::with_output, sleep_policy>
     thread_t     thread;
     sleep_policy sleeper;
 
-public :
+    std::unique_ptr<T> worker;
 
-    T task;
+public :
 
     worker_thread_t() : running(false), waiting(false) {}
 
     template<typename ... Args>
-    worker_thread_t(Args&&... args) : task(std::forward<Args...>(args...)), running(false), waiting(false) {}
+    explicit worker_thread_t(Args&&... args) : running(false), waiting(false),
+        worker(new T(std::forward<Args>(args)...)) {}
 
     ~worker_thread_t() {
         abort();
@@ -50,6 +51,16 @@ public :
     // Disable copy
     worker_thread_t(const worker_thread_t& t) = delete;
     worker_thread_t& operator = (const worker_thread_t& t) = delete;
+
+    // Get worker instance
+    T& get_worker() {
+        return *worker;
+    }
+
+    // Get worker instance
+    const T& get_worker() const {
+        return *worker;
+    }
 
     // Get the number of priority queues
     size_t get_num_queues() const {
@@ -77,18 +88,11 @@ public :
     #endif
     }
 
-    // Start working with new task parameters
-    void start_new() {
-        abort();
-        task = T();
-        start();
-    }
-
-    // Start working with new task parameters
+    // Start working with new worker
     template<typename ... Args>
     void start_new(Args&&... args) {
         abort();
-        task = T(std::forward<Args...>(args...));
+        worker = std::unique_ptr<T>(new T(std::forward<Args>(args)...));
         start();
     }
 
@@ -127,7 +131,7 @@ private :
             {
                 if (in[i].pop(data))
                 {
-                    task(data);
+                    (*worker)(data);
                     empty = false;
                     break;
                 }
@@ -152,14 +156,15 @@ class worker_thread_t<T, N, policies::task::no_output, sleep_policy>
     thread_t     thread;
     sleep_policy sleeper;
 
-public :
+    std::unique_ptr<T> worker;
 
-    T task;
+public :
 
     worker_thread_t() : running(false), waiting(false), empty(true) {}
 
     template<typename ... Args>
-    worker_thread_t(Args&&... args) : task(std::forward<Args...>(args...)), running(false), waiting(false), empty(true) {}
+    explicit worker_thread_t(Args&&... args) : running(false), waiting(false), empty(true),
+        worker(new T(std::forward<Args>(args)...)) {}
 
     ~worker_thread_t() {
         abort();
@@ -172,6 +177,16 @@ public :
     // Get the number of priority queues
     size_t get_num_queues() const {
         return N;
+    }
+
+    // Get worker instance
+    T& get_worker() {
+        return *worker;
+    }
+
+    // Get worker instance
+    const T& get_worker() const {
+        return *worker;
     }
 
     // Order a new task
@@ -192,17 +207,10 @@ public :
     }
 
     // Start working with new task parameters
-    void start_new() {
-        abort();
-        task = T();
-        start();
-    }
-
-    // Start working with new task parameters
     template<typename ... Args>
     void start_new(Args&&... args) {
         abort();
-        task = T(std::forward<Args...>(args...));
+        worker = std::unique_ptr<T>(new T(std::forward<Args>(args)...));
         start();
     }
 
@@ -241,7 +249,7 @@ private :
             {
                 if (in[i].pop(data))
                 {
-                    task(data);
+                    (*worker)(data);
                     empty = false;
                     break;
                 }
@@ -288,16 +296,28 @@ protected :
     lock_free_queue<argument> in[N];
     lock_free_queue<result>   out;
 
-public :
+    std::unique_ptr<T> worker;
 
-    T task;
+public :
 
     worker_t() = default;
     ~worker_t() final = default;
 
+    template <typename ... Args>
+    explicit worker_t(Args&&... args) : worker(new T(std::forward<Args>(args)...)) {}
+
     // Get the number of priority queues
     size_t get_num_queues() const {
         return N;
+    }
+    // Get worker instance
+    T& get_worker() {
+        return *worker;
+    }
+
+    // Get worker instance
+    const T& get_worker() const {
+        return *worker;
     }
 
     // Order a new task
@@ -311,14 +331,9 @@ public :
     }
 
     // Start working with new task parameters
-    void start_new() {
-        task = T();
-    }
-
-    // Start working with new task parameters
     template<typename ... Args>
     void start_new(Args&&... args) {
-        task = T(std::forward<Args...>(args...));
+        worker = std::unique_ptr<T>(new T(std::forward<Args>(args)...));
     }
 
 protected :
@@ -331,7 +346,7 @@ protected :
         {
             if (in[i].pop(data))
             {
-                out.push(task(data));
+                out.push((*worker)(data));
                 empty = false;
                 return;
             }
@@ -353,16 +368,29 @@ protected :
 
     lock_free_queue<argument> in[N];
 
-public :
+    std::unique_ptr<T> worker;
 
-    T task;
+public :
 
     worker_t() = default;
     ~worker_t() final = default;
 
+    template <typename ... Args>
+    explicit worker_t(Args&&... args) : worker(new T(std::forward<Args>(args)...)) {}
+
     // Get the number of priority queues
     size_t get_num_queues() const {
         return N;
+    }
+
+    // Get worker instance
+    T& get_worker() {
+        return *worker;
+    }
+
+    // Get worker instance
+    const T& get_worker() const {
+        return *worker;
     }
 
     // Order a new task
@@ -371,14 +399,9 @@ public :
     }
 
     // Start working with new task parameters
-    void start_new() {
-        task = T();
-    }
-
-    // Start working with new task parameters
     template<typename ... Args>
     void start_new(Args&&... args) {
-        task = T(std::forward<Args...>(args...));
+        worker = std::unique_ptr<T>(new T(std::forward<Args>(args)...));
     }
 
 protected :
@@ -391,7 +414,7 @@ protected :
         {
             if (in[i].pop(data))
             {
-                task(data);
+                (*worker)(data);
                 empty = false;
                 return;
             }

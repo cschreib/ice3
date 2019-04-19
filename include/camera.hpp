@@ -20,8 +20,8 @@ class camera : public movable
 {
 public :
 
-    camera(utils::wptr<world> pWorld);
-    camera(utils::wptr<world> pWorld, const vector3f& mPosition);
+    explicit camera(world& mWorld);
+    camera(world& mWorld, const vector3f& mPosition);
     ~camera() = default;
 
     void  set_params(float fFOVy, float fAspectRatio, float fNear, float fFar);

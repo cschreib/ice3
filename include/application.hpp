@@ -45,7 +45,6 @@ public :
     utils::wptr<T> push_state(Args... args)
     {
         utils::refptr<T> p(new T(*this, args...));
-        p->set_self(p);
         push_state_(p);
         return p;
     }
