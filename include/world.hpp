@@ -231,22 +231,13 @@ private :
     static const size_t NUM_PRIORITY_QUEUES = 10;
     static const size_t SLEEP_TIME = 20;
 
-    typedef worker_thread<
+    using updater_thread_t = worker_thread<
         update_chunk_task, NUM_PRIORITY_QUEUES,
         policies::sleep::sleep_for<SLEEP_TIME>
-    > updater_thread_t;
-
-    typedef multitask_worker_thread<
-        policies::sleep::sleep_for<SLEEP_TIME>
-    > loader_thread_t;
-
-    typedef worker<
-        load_chunk_task, NUM_PRIORITY_QUEUES
-    > load_worker_t;
-
-    typedef worker<
-        save_chunk_task
-    > save_worker_t;
+    >;
+    using loader_thread_t = multitask_worker_thread<policies::sleep::sleep_for<SLEEP_TIME>>;
+    using load_worker_t   = worker<load_chunk_task, NUM_PRIORITY_QUEUES>;
+    using save_worker_t   = worker<save_chunk_task> ;
 
     std::unique_ptr<updater_thread_t> pUpdaterThread_;
     std::unique_ptr<load_worker_t>    pLoadWorker_;
