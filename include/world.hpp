@@ -145,6 +145,8 @@ public :
     void toggle_shaders();
     bool are_shaders_enabled() const;
 
+    void enable_smooth_lighting(bool bSmoothLightingEnabled);
+    void toggle_smooth_lighting();
     bool is_smooth_lighting_enabled() const;
     void lighten_color(color& c, uchar sunlight, uchar light) const;
     float get_occlusion(uchar sunlight, uchar light) const;

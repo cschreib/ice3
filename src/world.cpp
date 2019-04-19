@@ -644,6 +644,17 @@ void world::reload_shaders_()
         pBlockShader_ = nullptr;
 }
 
+void world::enable_smooth_lighting(bool bSmoothLightingEnabled)
+{
+    if (bSmoothLighting_ != bSmoothLightingEnabled)
+        toggle_smooth_lighting();
+}
+
+void world::toggle_smooth_lighting() {
+    bSmoothLighting_ = !bSmoothLighting_;
+    reload_shaders_();
+}
+
 bool world::is_smooth_lighting_enabled() const
 {
     return bSmoothLighting_;
